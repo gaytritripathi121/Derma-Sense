@@ -1,0 +1,1639 @@
+# PROJECT: DERMASENSE AI
+## Complete Full-Stack AI-Based Skin Lesion Screening and Explainable AI Platform
+
+---
+
+# 1. YOUR ROLE AND PRIMARY OBJECTIVE
+
+Act as an expert:
+
+- Full-Stack JavaScript Developer.
+- React Developer.
+- Machine Learning Engineer.
+- Deep Learning Engineer.
+- TensorFlow.js Developer.
+- UI/UX Designer.
+- Database and Backend Architect.
+- Software Tester.
+
+Build a complete, functional, responsive, full-stack web application named:
+
+**DermaSense AI — Explainable CNN-Based Skin Disease Screening System**
+
+This is my B.Tech Computer Science academic project.
+
+I want a genuine machine-learning application that I can demonstrate, test, present and explain during my college project evaluation.
+
+Your responsibility is to build the ENTIRE application, including:
+
+1. Complete frontend.
+2. Complete backend.
+3. Dataset downloading and management.
+4. Dataset preprocessing.
+5. Actual CNN model development.
+6. Actual model training using PAD-UFES-20.
+7. Model evaluation.
+8. Model persistence.
+9. Real image prediction.
+10. Grad-CAM explainability.
+11. Patient-history analysis.
+12. Contextual risk assessment.
+13. Safe Corner personalized wellness module.
+14. PDF report generation.
+15. Model performance analytics.
+16. Prediction history.
+17. Security and privacy.
+18. Testing and deployment.
+
+**Do not stop after generating the frontend or creating a project structure.**
+
+Build the actual application, execute the available code, test its functionality, identify errors and fix them.
+
+The final result must be a functioning machine-learning-powered website, not a visual prototype.
+
+## 1.1 Strict development requirements
+
+I specifically want JavaScript, NOT TypeScript.
+
+MANDATORY:
+
+- React with JSX.
+- JavaScript ES6+.
+- `.js` files.
+- `.jsx` files.
+- Node.js backend.
+- JavaScript-based API routes.
+- TensorFlow.js for the machine-learning pipeline.
+
+STRICTLY DO NOT USE:
+
+- TypeScript.
+- `.ts` files.
+- `.tsx` files.
+- Python.
+- Flask.
+- Streamlit.
+- A Python-based frontend.
+- A separate Python backend.
+- Hardcoded mock predictions.
+- Fake model training.
+- Simulated training progress.
+- Fabricated evaluation metrics.
+
+Do not generate TypeScript even if a default template or generated dependency uses it. Convert the application to JavaScript and JSX.
+
+Use JavaScript-compatible libraries and dependencies throughout.
+
+Do not ask me to manually write model training code.
+
+Do not ask me to manually create the website pages.
+
+Implement everything yourself.
+
+---
+
+# 2. GOOGLE AI STUDIO ENVIRONMENT
+
+Build this application specifically for Google AI Studio Build Mode.
+
+Before implementation:
+
+1. Inspect the available Node.js runtime.
+2. Check the installed Node.js version.
+3. Check npm availability.
+4. Check available RAM and storage.
+5. Check whether external dataset downloads are permitted.
+6. Check whether TensorFlow.js packages can be installed.
+7. Check whether the environment supports model training.
+8. Check whether generated model files can be persisted.
+9. Check available database and cloud-storage integrations.
+10. Identify any deployment limitations.
+
+Use the available Google AI Studio full-stack environment.
+
+The architecture must be:
+
+| Component | Technology |
+|---|---|
+| Frontend | React |
+| UI | JSX |
+| Language | JavaScript ES6+ |
+| Styling | Tailwind CSS |
+| Backend | Node.js |
+| API | Node.js server routes |
+| ML framework | TensorFlow.js |
+| Model | CNN |
+| Explainable AI | Grad-CAM |
+| Charts | Recharts |
+| Icons | Lucide React |
+| PDF reports | jsPDF or pdfkit |
+| Data validation | Zod or equivalent JavaScript validation |
+| Database | Firebase Firestore, if persistent data is needed |
+| File/model storage | Google Cloud Storage or Firebase Storage, where configured |
+| Deployment | Google Cloud Run through AI Studio |
+
+Use the existing AI Studio application runtime and its supported configuration.
+
+Do not introduce unnecessary external infrastructure.
+
+If a particular integration requires credentials or permissions, explain exactly what is required.
+
+Do not expose secrets in frontend code.
+
+---
+
+# 3. DATASET — PAD-UFES-20 (MANDATORY)
+
+This project MUST use the PAD-UFES-20 dataset.
+
+Official dataset:
+
+https://data.mendeley.com/datasets/zr7vgbcyr2/1
+
+Official GitHub repository:
+
+https://github.com/labcin-ufes/PAD-UFES-20
+
+Do not replace this dataset with another dataset.
+
+Do not use ISIC, HAM10000, DermNet or any unrelated dataset as a substitute.
+
+Do not add the previous 19 categories.
+
+## 3.1 Dataset downloading — DO THIS YOURSELF
+
+I want you to attempt to download the dataset automatically.
+
+Do not immediately ask me to upload it.
+
+First:
+
+1. Access the official Mendeley dataset page.
+2. Inspect the available dataset files.
+3. Identify the actual downloadable archive and metadata CSV.
+4. Identify the dataset version.
+5. Check whether the dataset is publicly downloadable.
+6. Download the official archive using an appropriate server-side HTTP request.
+7. Follow redirects where required.
+8. Handle large downloads safely.
+9. Verify the downloaded file.
+10. Extract the archive.
+11. Identify the metadata CSV.
+12. Locate the clinical images.
+13. Verify the actual contents.
+
+Use the official source rather than downloading an unofficial copy.
+
+If the official source requires authentication, a manual download or an inaccessible browser interaction, do not bypass its access restrictions.
+
+If downloading fails, provide the exact reason and implement a working dataset-upload interface.
+
+The upload interface must accept the official dataset ZIP archive and its metadata CSV.
+
+Do not repeatedly ask me for the dataset if a successful download has already occurred.
+
+**Important:** Never claim that downloading or extraction succeeded without verifying the resulting files.
+
+## 3.2 Exact classification categories
+
+The model must have exactly six output categories.
+
+| Code | Category |
+|---|---|
+| ACK | Actinic keratosis |
+| BCC | Basal cell carcinoma |
+| MEL | Melanoma |
+| NEV | Nevus |
+| SCC | Squamous cell carcinoma, including Bowen's disease/SCC in situ |
+| SEK | Seborrheic keratosis |
+
+These six categories must be consistent throughout the entire application.
+
+Use the following class mapping:
+
+```javascript
+export const CLASS_MAPPING = {
+  0: "ACK",
+  1: "BCC",
+  2: "MEL",
+  3: "NEV",
+  4: "SCC",
+  5: "SEK"
+};
+```
+
+The mapping must be checked against the actual training labels.
+
+The final classification layer must contain exactly six outputs.
+
+Do not invent additional categories.
+
+## 3.3 Dataset inspection
+
+The dataset is expected to contain approximately:
+
+- 2,298 clinical images.
+- 1,373 patients.
+- 1,641 lesions.
+- Six diagnostic categories.
+
+These are expected reference figures, not guaranteed imported counts.
+
+Inspect the actual dataset rather than assuming these numbers.
+
+Automatically identify:
+
+- Image files.
+- Metadata CSV.
+- Image filename column.
+- Diagnostic label column.
+- Patient identifiers.
+- Lesion identifiers.
+- Available clinical attributes.
+- Missing values.
+- Duplicate records.
+- Corrupted images.
+- Unreadable images.
+- Invalid labels.
+
+Use the metadata CSV to map images to their diagnostic labels.
+
+Do not assign labels by guessing what a lesion looks like.
+
+Display the actual class distribution and the actual number of usable records.
+
+## 3.4 Dataset Management page
+
+Create a complete Dataset Management dashboard.
+
+Include:
+
+- Download Dataset.
+- Upload Dataset.
+- Upload Metadata CSV.
+- Extract Dataset.
+- Validate Dataset.
+- Preview Images.
+- Preview Metadata.
+- View Dataset Statistics.
+- View Class Distribution.
+- View Missing Files.
+- View Duplicate Records.
+- View Corrupted Images.
+- View Patient Count.
+- View Lesion Count.
+- View Dataset Readiness.
+
+Include download progress, extraction progress and validation logs.
+
+Every button must perform a real action.
+
+## 3.5 Dataset splitting and leakage prevention
+
+Prevent patient-level data leakage.
+
+Images from the same patient must not appear in different splits.
+
+Where lesion identifiers exist, keep images from the same lesion together as well.
+
+Use group-aware splitting with:
+
+- 70% training.
+- 15% validation.
+- 15% testing.
+
+Use stratification where feasible.
+
+Save the actual split assignments.
+
+Display the actual number of patients, lesions and images in each split.
+
+Do not use the held-out test set during training or hyperparameter selection.
+
+If group-aware stratification is not feasible, implement and document a defensible alternative.
+
+---
+
+# 4. ACTUAL CNN DEVELOPMENT AND TRAINING
+
+This is the most important requirement of the project.
+
+I want a CNN model that is genuinely trained on PAD-UFES-20.
+
+Do not use Gemini as a substitute for a trained CNN.
+
+Do not ask Gemini to visually guess the disease.
+
+Do not return hardcoded results.
+
+Do not load a random pretrained classifier and claim it was trained on PAD-UFES-20.
+
+## 4.1 Machine-learning framework
+
+Use TensorFlow.js.
+
+Preferred dependencies:
+
+- `@tensorflow/tfjs`
+- `@tensorflow/tfjs-node`, if the runtime supports it reliably.
+- `@tensorflow/tfjs-backend-cpu`
+- `@tensorflow/tfjs-backend-webgl`, only where appropriate.
+
+Inspect actual package compatibility before choosing the backend.
+
+Prefer the Node.js TensorFlow backend for server-side training if installation succeeds.
+
+If native TensorFlow.js dependencies are incompatible with the runtime, use the supported pure JavaScript TensorFlow.js backend.
+
+Do not silently substitute an unrelated model.
+
+## 4.2 Model architecture
+
+Build a six-class CNN using TensorFlow.js.
+
+The architecture should include:
+
+- Convolutional layers.
+- Batch normalization.
+- ReLU activations.
+- Max pooling.
+- Dropout.
+- Global average pooling.
+- Dense layers.
+- Six-unit softmax output.
+
+A lightweight architecture is preferred because PAD-UFES-20 is relatively small and the available environment may have limited computational resources.
+
+You may use transfer learning with a suitable MobileNetV2 backbone if the selected TensorFlow.js implementation supports it.
+
+However, the final model must be trained or fine-tuned using PAD-UFES-20.
+
+Document:
+
+- Architecture.
+- Trainable layers.
+- Frozen layers, if applicable.
+- Optimizer.
+- Learning rate.
+- Loss function.
+- Batch size.
+- Image size.
+- Epochs.
+- Random seed.
+
+## 4.3 Image preprocessing
+
+Implement a consistent pipeline:
+
+1. Load image.
+2. Convert to RGB.
+3. Resize to 192 × 192 or 224 × 224.
+4. Normalize pixel values.
+5. Convert to TensorFlow.js tensors.
+6. Apply augmentation during training.
+7. Generate batches.
+
+Save preprocessing settings with the model.
+
+Use identical preprocessing during inference.
+
+## 4.4 Data augmentation
+
+Implement suitable training-only augmentation:
+
+- Small rotations.
+- Horizontal flipping.
+- Carefully selected vertical flipping.
+- Zoom.
+- Translation.
+- Brightness adjustments.
+- Contrast adjustments.
+
+Do not augment validation or testing images.
+
+Avoid transformations that destroy clinically relevant image information.
+
+## 4.5 Class imbalance
+
+Calculate actual class frequencies.
+
+Implement appropriate class-weighted loss or balanced sampling.
+
+Evaluate using macro-F1 and per-class metrics.
+
+Do not report artificially balanced class distributions unless the data has actually been balanced.
+
+## 4.6 Actual training execution
+
+Automatically begin model training after dataset validation succeeds, provided the environment has sufficient resources.
+
+The process must include:
+
+1. Dataset loading.
+2. Metadata processing.
+3. Patient-grouped splitting.
+4. Preprocessing.
+5. Training dataset creation.
+6. Validation dataset creation.
+7. CNN compilation.
+8. Actual model.fit() training.
+9. Validation monitoring.
+10. Early stopping.
+11. Model checkpointing.
+12. Evaluation on the held-out test set.
+13. Saving the final model.
+
+Use a reasonable default of 20–30 epochs, configurable according to actual computational resources.
+
+Do not start an excessively expensive training job without checking resource availability.
+
+## 4.7 Training dashboard
+
+Build a professional training interface showing:
+
+- Dataset readiness.
+- Training status.
+- Current epoch.
+- Total epochs.
+- Training loss.
+- Validation loss.
+- Training accuracy.
+- Validation accuracy.
+- Batch size.
+- Image size.
+- Training progress.
+- Training logs.
+- Best checkpoint.
+- Training duration.
+
+Provide functional buttons:
+
+- Start Training.
+- Stop Training.
+- Resume Training.
+- Retrain Model.
+
+Training progress must come from actual training callbacks.
+
+Do not simulate progress.
+
+## 4.8 Checkpoints and persistence
+
+Save:
+
+- `trained_model`
+- `best_model`
+- Class mapping.
+- Training configuration.
+- Preprocessing configuration.
+- Training history.
+- Split assignments.
+- Evaluation metrics.
+- Model version.
+- Training logs.
+
+Use TensorFlow.js model saving and loading.
+
+Do not assume the local filesystem of a deployed Cloud Run instance is permanent.
+
+Use persistent cloud storage when configured.
+
+If persistent storage is unavailable, clearly explain the limitation and provide an exportable model artifact and reproducible retraining workflow.
+
+Do not retrain automatically every time the application starts.
+
+---
+
+# 5. IMPORTANT: TRAINING ENVIRONMENT FALLBACK
+
+Google AI Studio uses a Node.js server environment. Do not assume it provides Python, GPU access or unlimited memory.
+
+Before training, inspect what is actually available.
+
+Follow this priority:
+
+**Option A:** Train using TensorFlow.js with the available Node.js backend.
+
+**Option B:** If native TensorFlow.js is unavailable, use the pure JavaScript TensorFlow.js CPU backend.
+
+**Option C:** If the available runtime cannot complete training because of resource constraints, implement resumable, checkpoint-based training and explain the exact limitation.
+
+**Option D:** If full training is impossible inside the current AI Studio runtime, prepare a separate, reproducible JavaScript-compatible training workflow that can run on an appropriate compute environment and integrate its resulting model into the application.
+
+Never replace actual training with fake training.
+
+Never mark training complete when only the training code has been created.
+
+If training is interrupted, preserve the last valid checkpoint and allow continuation.
+
+The application must always distinguish:
+
+- Dataset downloaded.
+- Dataset extracted.
+- Dataset validated.
+- Training not started.
+- Training in progress.
+- Training interrupted.
+- Training completed.
+- Model available.
+- Model unavailable.
+
+---
+
+# 6. PREDICTION ENGINE
+
+Build a real image-classification system.
+
+The user must be able to upload a skin-lesion image and receive predictions from the saved CNN.
+
+## Workflow
+
+1. Open Analyze Skin Image.
+2. Upload JPG, JPEG or PNG.
+3. Preview the image.
+4. Complete patient-history questions.
+5. Click Analyze.
+6. Validate the uploaded image.
+7. Apply preprocessing.
+8. Load the trained CNN.
+9. Run actual inference.
+10. Calculate six class scores.
+11. Rank the top three predictions.
+12. Apply the confidence threshold.
+13. Generate Grad-CAM.
+14. Run the separate patient-history rule engine.
+15. Display the results.
+
+## Results interface
+
+Display:
+
+- Predicted category.
+- Full category name.
+- Confidence percentage.
+- Top three predictions.
+- Probability distribution.
+- Confidence status.
+- Contextual risk flags.
+- General educational information.
+- Suggested next steps.
+
+Use actual model outputs.
+
+Do not use example probabilities in production.
+
+## Confidence threshold
+
+Use a configurable default threshold of 70%.
+
+If confidence is below 70%, display:
+
+"LOW CONFIDENCE: The model is uncertain about this image. This result should not be relied upon. Please consult a qualified dermatologist."
+
+If confidence is above 70%, display a standard-confidence status.
+
+Do not describe raw model confidence as clinically validated diagnostic probability.
+
+Calibrate the model where feasible.
+
+A high-confidence result must never be presented as proof that a lesion is benign.
+
+If the model is not trained or available, disable prediction and explain why.
+
+---
+
+# 7. GRAD-CAM EXPLAINABLE AI
+
+Implement actual Grad-CAM using TensorFlow.js.
+
+For every prediction:
+
+1. Identify the final suitable convolutional layer.
+2. Calculate gradients for the selected class.
+3. Calculate channel importance weights.
+4. Generate the activation heatmap.
+5. Apply ReLU.
+6. Normalize the heatmap.
+7. Resize it to the original image.
+8. Overlay it on the uploaded image.
+
+Display:
+
+- Original image.
+- Grad-CAM heatmap.
+- Combined overlay.
+- Side-by-side comparison.
+
+Add a short explanation:
+
+"Highlighted regions indicate image areas that contributed to the model's prediction. This visualization does not establish medical significance or provide clinical proof."
+
+Create tabs:
+
+1. Original Image.
+2. Heatmap.
+3. Overlay.
+4. Explanation.
+
+Do not use randomly generated heatmaps or decorative visualizations.
+
+The heatmap must be calculated using the actual trained CNN and uploaded image.
+
+If the chosen model architecture does not support the intended Grad-CAM implementation, implement a technically valid alternative and document it.
+
+---
+
+# 8. PATIENT HISTORY FORM
+
+Create a complete patient-history intake form.
+
+### Basic information
+
+- Age.
+- Gender, including prefer not to disclose.
+- Fitzpatrick skin type.
+- Body region.
+- Approximate lesion diameter.
+
+### Medical history
+
+- Personal history of skin cancer.
+- Family history of skin cancer.
+- Relevant medical history.
+
+### Symptoms
+
+- Itching.
+- Itching severity.
+- Lesion duration.
+- Growth.
+- Changes in appearance.
+- Pain.
+- Bleeding.
+- Elevated appearance.
+
+Allow unknown or undisclosed responses.
+
+Do not force unnecessary information.
+
+## Metadata separation
+
+Inspect the PAD-UFES-20 CSV and identify the actual available clinical attributes.
+
+Do not assume every patient-history field exists in the dataset.
+
+Do not claim that the CNN has learned from patient history.
+
+The primary CNN must remain an image-based six-class classifier.
+
+Implement patient-history analysis independently.
+
+---
+
+# 9. PATIENT CONTEXTUAL RISK ENGINE
+
+Create a transparent, configurable JavaScript rule engine.
+
+Use a JSON-based knowledge base.
+
+Each rule should contain:
+
+- Rule ID.
+- Triggering conditions.
+- Relevant patient-history inputs.
+- Severity.
+- Explanation.
+- Suggested next step.
+
+Illustrative examples:
+
+- Changing lesions trigger an evaluation flag.
+- Bleeding lesions trigger an attention flag.
+- Relevant personal history triggers a contextual flag.
+- Multiple concerning symptoms trigger additional attention.
+
+The rules must be based on carefully reviewed medical guidance.
+
+Display:
+
+- Triggered factors.
+- Rule severity.
+- Explanation.
+- Contextual status.
+- Recommended next step.
+
+Do not call this a clinically validated risk score.
+
+Do not modify the CNN's prediction probabilities using these rules.
+
+Do not describe rule-based explanations as SHAP.
+
+Keep CNN inference and contextual reasoning completely separate.
+
+---
+
+# 10. DISEASE INFORMATION KNOWLEDGE BASE
+
+Create `diseaseInfo.js` containing information for exactly six categories:
+
+- ACK.
+- BCC.
+- MEL.
+- NEV.
+- SCC.
+- SEK.
+
+For each, include:
+
+- Full name.
+- Description.
+- General characteristics.
+- General risk information.
+- Suggested next steps.
+- Urgency guidance.
+- Safe Corner reference.
+- Educational sources.
+
+Use trustworthy medical references such as:
+
+- American Academy of Dermatology.
+- National Cancer Institute.
+- NHS.
+- American Cancer Society.
+
+Do not invent medical facts.
+
+Do not recommend self-treatment for potentially malignant lesions.
+
+Do not imply that an image prediction confirms a disease.
+
+---
+
+# 11. SAFE CORNER — PERSONALIZED CARE MODULE
+
+Build Safe Corner as a fully functional independent section.
+
+It should be an interactive wellness and follow-up companion.
+
+## Inputs
+
+Use:
+
+- Prediction category.
+- Confidence status.
+- Patient history.
+- Skin type.
+- Symptoms.
+- Wake-up time.
+- Sleep time.
+- User routine preferences.
+
+If confidence is below 70%, do not generate disease-specific advice based on the uncertain predicted category.
+
+## Features
+
+### A. Daily routine
+
+Generate a personalized schedule containing:
+
+- Morning skincare.
+- Sunscreen.
+- Sunscreen reapplication reminders.
+- Sun protection.
+- Gentle skincare.
+- Hydration.
+- Sleep schedule.
+- Skin monitoring.
+- Follow-up reminders.
+
+### B. Condition-specific guidance
+
+Use the disease knowledge base.
+
+Prioritize professional evaluation where appropriate.
+
+### C. Interactive daily checklist
+
+Users must be able to:
+
+- Mark tasks complete.
+- Unmark tasks.
+- View pending tasks.
+- Track daily progress.
+- Reset the checklist for a new day.
+
+### D. Weekly planner
+
+Display a seven-day schedule.
+
+### E. ABCDE lesion monitoring guide
+
+Include:
+
+- Asymmetry.
+- Border.
+- Color.
+- Diameter.
+- Evolving.
+
+Allow users to record observations.
+
+Explain that this is an educational monitoring guide, not a diagnostic test.
+
+### F. Appointment reminders
+
+Allow the user to add a dermatologist appointment date and time.
+
+### G. Calendar export
+
+Generate a valid `.ics` calendar file.
+
+### H. Wellness progress
+
+Display:
+
+- Completed tasks.
+- Pending tasks.
+- Daily completion percentage.
+- Weekly adherence.
+
+Use persistent storage only where configured and with appropriate user consent.
+
+---
+
+# 12. AUTOMATED PDF REPORT GENERATION
+
+Implement downloadable PDF reports using a JavaScript-compatible PDF library.
+
+Use jsPDF or pdfkit.
+
+Every completed analysis must have an option to generate a PDF report.
+
+Include:
+
+1. DermaSense AI branding.
+2. Unique report ID.
+3. Date and time.
+4. Optional patient initials.
+5. Uploaded image.
+6. Predicted category.
+7. Confidence.
+8. Top three predictions.
+9. Confidence status.
+10. Grad-CAM heatmap.
+11. Original and explained images.
+12. Patient-history summary.
+13. Contextual flags.
+14. Rule-engine explanation.
+15. Disease information.
+16. General care recommendations.
+17. Safe Corner routine.
+18. Suggested next steps.
+19. Model version.
+20. Dataset source.
+21. Actual model evaluation metrics.
+
+Include the medical disclaimer:
+
+"DermaSense AI is an experimental AI-based skin screening tool. It does not provide a medical diagnosis and cannot replace professional medical evaluation. Always consult a qualified dermatologist."
+
+Display the low-confidence warning where applicable.
+
+Never fabricate report data.
+
+---
+
+# 13. MODEL PERFORMANCE DASHBOARD
+
+Create a dedicated Model Performance page.
+
+Calculate and display actual held-out test results.
+
+Include:
+
+- Accuracy.
+- Precision.
+- Recall.
+- Macro-F1.
+- Weighted-F1.
+- Per-class precision.
+- Per-class recall.
+- Per-class F1.
+- Confusion matrix.
+- ROC-AUC where appropriate.
+- Training accuracy curve.
+- Validation accuracy curve.
+- Training loss curve.
+- Validation loss curve.
+- Class distribution.
+- Confidence distribution.
+- Calibration information.
+- Training duration.
+
+Also show:
+
+- Dataset size.
+- Patient count.
+- Lesion count.
+- Training date.
+- Model architecture.
+- Model version.
+- Image size.
+- Batch size.
+- Number of epochs.
+- Train/validation/test split.
+
+Use Recharts for visualizations.
+
+All metrics must be calculated from actual training and evaluation.
+
+Never hardcode metrics.
+
+Never substitute training accuracy for test accuracy.
+
+---
+
+# 14. IMAGE QUALITY ASSESSMENT
+
+Before inference, validate:
+
+- Image format.
+- Image size.
+- Image dimensions.
+- Corrupted files.
+- Blur.
+- Brightness.
+- Exposure.
+
+Reject invalid or unreadable files.
+
+Display understandable warnings when image quality is inadequate.
+
+Implement basic out-of-distribution safeguards where feasible.
+
+Do not guarantee that an uploaded phone photograph is suitable for classification simply because it passes technical image checks.
+
+---
+
+# 15. PREDICTION HISTORY
+
+Build a functional history page.
+
+Display:
+
+- Image thumbnail.
+- Predicted class.
+- Confidence.
+- Date and time.
+- Confidence status.
+- Download report.
+
+Allow users to clear history.
+
+Use session-based storage by default.
+
+Do not permanently store sensitive images or medical information without explicit consent.
+
+Clean up temporary files.
+
+---
+
+# 16. COMPLETE FRONTEND AND UI DESIGN
+
+The interface must look like a professional healthcare AI platform.
+
+Do not make it look like a basic college project.
+
+## Design system
+
+Use:
+
+- Clean white background.
+- Deep navy.
+- Teal accents.
+- Soft blue.
+- Subtle gradients.
+- Rounded cards.
+- Professional typography.
+- Consistent spacing.
+- Modern icons.
+- Responsive layout.
+- Subtle transitions.
+- Professional charts.
+
+Avoid excessive gradients, unnecessary animations and clutter.
+
+## Home dashboard
+
+Include:
+
+- DermaSense AI logo.
+- Tagline.
+- Welcome section.
+- Model status.
+- Dataset status.
+- Total imported images.
+- Number of classes.
+- Latest training information.
+- Actual model performance.
+- Analyze Skin Image shortcut.
+- Safe Corner preview.
+- Medical disclaimer.
+
+All statistics must be dynamically fetched from the backend.
+
+If the model has not been trained, show:
+
+"Model training required."
+
+Never show fabricated metrics.
+
+## Required navigation
+
+Create all of these pages:
+
+1. Home.
+2. Analyze Skin Image.
+3. Prediction Results.
+4. Explainable AI.
+5. Safe Corner.
+6. Model Training.
+7. Dataset Management.
+8. Model Performance.
+9. Prediction History.
+10. Disease Information.
+11. About DermaSense AI.
+
+Every navigation item must work.
+
+Every page must be connected to actual application logic.
+
+---
+
+# 17. BACKEND AND API ARCHITECTURE
+
+Use Node.js and JavaScript.
+
+Do not create a Flask backend.
+
+Do not create a Streamlit application.
+
+Keep the frontend and backend modular.
+
+Implement these API endpoints.
+
+### Health
+
+`GET /api/health`
+
+Returns application and server status.
+
+### Model status
+
+`GET /api/model/status`
+
+Returns:
+
+- Model availability.
+- Model version.
+- Training status.
+- Dataset readiness.
+- Last training date.
+
+### Dataset management
+
+`POST /api/dataset/download`
+
+Attempt downloading the official dataset.
+
+`POST /api/dataset/upload`
+
+Upload the dataset archive.
+
+`POST /api/dataset/extract`
+
+Extract the dataset.
+
+`POST /api/dataset/validate`
+
+Validate metadata and images.
+
+`GET /api/dataset/stats`
+
+Return actual dataset statistics.
+
+### Training
+
+`POST /api/train/start`
+
+Start actual model training.
+
+`POST /api/train/stop`
+
+Stop training safely.
+
+`POST /api/train/resume`
+
+Resume from a valid checkpoint.
+
+`GET /api/train/status`
+
+Return actual training progress.
+
+### Prediction
+
+`POST /api/predict`
+
+Accept image and patient-history JSON.
+
+Return:
+
+- Actual CNN prediction.
+- Six class probabilities.
+- Top three predictions.
+- Confidence status.
+- Grad-CAM result.
+- Contextual rule-engine output.
+- Model version.
+
+### Explainability
+
+`GET /api/explainability/:reportId`
+
+Return actual Grad-CAM images and explanation data.
+
+### Reports
+
+`POST /api/reports/generate`
+
+Generate a downloadable PDF report.
+
+### Analytics
+
+`GET /api/model/metrics`
+
+Return actual evaluation metrics.
+
+### History
+
+`GET /api/history`
+
+Return permitted session history.
+
+`DELETE /api/history`
+
+Clear history.
+
+Use appropriate validation and controlled errors.
+
+Never expose raw server stack traces.
+
+Do not expose secrets or credentials to the browser.
+
+---
+
+# 18. REQUIRED JAVASCRIPT PROJECT STRUCTURE
+
+Use a clean modular structure similar to:
+
+```text
+dermasense-ai/
+│
+├── package.json
+├── index.html
+├── README.md
+├── .env.example
+│
+├── src/
+│   ├── main.jsx
+│   ├── App.jsx
+│   │
+│   ├── components/
+│   │   ├── Navbar.jsx
+│   │   ├── Sidebar.jsx
+│   │   ├── DashboardCard.jsx
+│   │   ├── ImageUploader.jsx
+│   │   ├── ConfidenceChart.jsx
+│   │   ├── GradCAMViewer.jsx
+│   │   ├── PatientHistoryForm.jsx
+│   │   └── LoadingState.jsx
+│   │
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   ├── Analyze.jsx
+│   │   ├── Results.jsx
+│   │   ├── Explainability.jsx
+│   │   ├── SafeCorner.jsx
+│   │   ├── Training.jsx
+│   │   ├── DatasetManagement.jsx
+│   │   ├── Performance.jsx
+│   │   ├── History.jsx
+│   │   ├── DiseaseInfo.jsx
+│   │   └── About.jsx
+│   │
+│   ├── services/
+│   │   ├── api.js
+│   │   ├── predictionService.js
+│   │   └── reportService.js
+│   │
+│   ├── data/
+│   │   ├── diseaseInfo.js
+│   │   └── classMapping.js
+│   │
+│   └── utils/
+│       ├── validation.js
+│       └── formatting.js
+│
+├── server/
+│   ├── index.js
+│   ├── routes/
+│   │   ├── datasetRoutes.js
+│   │   ├── trainingRoutes.js
+│   │   ├── predictionRoutes.js
+│   │   ├── modelRoutes.js
+│   │   └── reportRoutes.js
+│   │
+│   ├── ml/
+│   │   ├── datasetLoader.js
+│   │   ├── preprocessing.js
+│   │   ├── model.js
+│   │   ├── train.js
+│   │   ├── predict.js
+│   │   ├── evaluate.js
+│   │   └── gradcam.js
+│   │
+│   ├── rules/
+│   │   ├── ruleEngine.js
+│   │   └── rules.json
+│   │
+│   ├── safety/
+│   │   ├── confidence.js
+│   │   └── imageQuality.js
+│   │
+│   ├── safeCorner/
+│   │   ├── planner.js
+│   │   └── calendarExport.js
+│   │
+│   └── reports/
+│       └── pdfGenerator.js
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── models/
+│   ├── trainedModel/
+│   ├── checkpoints/
+│   └── modelConfig.json
+│
+├── outputs/
+│   ├── metrics/
+│   ├── reports/
+│   └── logs/
+│
+└── tests/
+    ├── dataset.test.js
+    ├── model.test.js
+    ├── prediction.test.js
+    ├── gradcam.test.js
+    ├── rules.test.js
+    └── api.test.js
+```
+
+You may improve this architecture where necessary.
+
+The important requirements are:
+
+- JavaScript files only.
+- JSX for React components.
+- Modular implementation.
+- Readable code.
+- No unnecessary duplicate files.
+- Actual working integrations.
+
+---
+
+# 19. SECURITY AND PRIVACY
+
+Implement:
+
+- File-type validation.
+- File-size limits.
+- Safe image processing.
+- Input validation.
+- Controlled error handling.
+- Temporary file cleanup.
+- Session-based history.
+- No permanent image storage by default.
+- Protected training controls.
+- Secure environment variables.
+- Server-side secrets.
+
+Do not expose API keys.
+
+Use Google AI Studio Secrets for required credentials.
+
+Do not invent or hardcode database credentials.
+
+Do not require MongoDB unless there is a specific architectural reason. Prefer the simplest supported persistence solution.
+
+If Firebase or Google Cloud Storage requires my permission or configuration, explain the exact setup steps.
+
+---
+
+# 20. MEDICAL SAFETY
+
+This is an experimental academic screening project.
+
+The application must clearly explain:
+
+- Predictions are preliminary.
+- The CNN is not a dermatologist.
+- Confidence is not confirmed diagnostic accuracy.
+- Grad-CAM is not clinical proof.
+- Patient-history rules are heuristic.
+- The model has not been clinically validated.
+- PAD-UFES-20 may not represent every population.
+- A benign-looking prediction does not rule out cancer.
+- Users should seek professional evaluation for concerning or changing lesions.
+
+Do not recommend self-treatment for potentially malignant lesions.
+
+Do not delay medical evaluation based on a low-risk prediction.
+
+---
+
+# 21. TESTING
+
+Create and execute tests for:
+
+1. Dataset download.
+2. Dataset extraction.
+3. Metadata parsing.
+4. Image-label mapping.
+5. Six-class mapping.
+6. Image preprocessing.
+7. Patient-grouped splitting.
+8. Data leakage prevention.
+9. CNN model creation.
+10. Model training.
+11. Checkpoint saving.
+12. Model loading.
+13. Actual prediction.
+14. Confidence threshold.
+15. Grad-CAM.
+16. Patient-history rule engine.
+17. PDF generation.
+18. Safe Corner schedule.
+19. API endpoints.
+20. Invalid image uploads.
+21. Missing model.
+22. Missing class.
+23. Corrupted images.
+24. Training interruption and recovery.
+25. Model persistence.
+
+Perform a complete end-to-end test:
+
+Upload image → Fill patient history → Analyze → Get actual prediction → View confidence → View Grad-CAM → View contextual flags → Generate Safe Corner routine → Download PDF.
+
+Never claim a test passed unless it was actually executed.
+
+---
+
+# 22. DEVELOPMENT ORDER
+
+Follow this order.
+
+### Phase 1 — Environment inspection
+
+Inspect Google AI Studio's available runtime, dependencies, memory and storage.
+
+### Phase 2 — Project architecture
+
+Create the complete JavaScript and JSX application structure.
+
+### Phase 3 — Dataset acquisition
+
+Attempt to download PAD-UFES-20 from the official Mendeley source.
+
+If blocked, implement the dataset-upload alternative.
+
+### Phase 4 — Dataset processing
+
+Extract, inspect, validate and preprocess the actual data.
+
+### Phase 5 — CNN training
+
+Build the CNN, train using the dataset, evaluate and save the model.
+
+### Phase 6 — Prediction backend
+
+Implement actual inference.
+
+### Phase 7 — Explainable AI
+
+Implement Grad-CAM.
+
+### Phase 8 — Patient-history engine
+
+Implement the independent rule-based reasoning system.
+
+### Phase 9 — Safe Corner
+
+Implement routines, checklists, planner and calendar export.
+
+### Phase 10 — PDF reporting
+
+Generate actual downloadable reports.
+
+### Phase 11 — Frontend integration
+
+Connect all React pages to backend APIs.
+
+### Phase 12 — Analytics
+
+Implement real model performance dashboards.
+
+### Phase 13 — Testing
+
+Test the complete application and fix issues.
+
+### Phase 14 — Deployment
+
+Prepare the application for Google AI Studio preview and Cloud Run deployment.
+
+Do not skip the ML pipeline.
+
+Do not create only a frontend and call the project complete.
+
+Do not fabricate successful training.
+
+---
+
+# 23. GITHUB AND PROJECT OWNERSHIP
+
+Keep all project code accessible.
+
+I want to be able to:
+
+- Inspect every file.
+- Edit the source code.
+- Download the complete project.
+- Connect my GitHub repository.
+- Push future changes.
+- Access model configuration.
+- Access trained model artifacts.
+- Retrain the model.
+- Run the application independently.
+
+Use Google AI Studio's GitHub integration if available.
+
+Do not commit:
+
+- Dataset archives.
+- Large temporary files.
+- Credentials.
+- Private patient images.
+- Environment secrets.
+
+Include a comprehensive README containing:
+
+- Project overview.
+- Architecture.
+- Dataset source.
+- Dataset attribution and applicable license.
+- Installation.
+- Environment configuration.
+- Dataset acquisition.
+- Training instructions.
+- Model architecture.
+- Prediction workflow.
+- API documentation.
+- Deployment.
+- Limitations.
+
+---
+
+# 24. FINAL ACCEPTANCE CRITERIA
+
+The project is complete only when:
+
+1. The website runs successfully in Google AI Studio.
+2. The frontend uses React and JSX.
+3. The backend uses JavaScript and Node.js.
+4. No TypeScript or TSX files are used.
+5. PAD-UFES-20 is downloaded or successfully imported.
+6. Metadata is parsed.
+7. Exactly six categories are mapped.
+8. Dataset validation works.
+9. Patient-grouped splitting is implemented.
+10. A genuine CNN is trained on PAD-UFES-20.
+11. The trained model is saved.
+12. The model loads after application restart using persistent storage.
+13. New images receive actual CNN predictions.
+14. Top-three predictions work.
+15. The 70% confidence rule works.
+16. Grad-CAM generates actual explanations.
+17. Patient-history rules work independently.
+18. Safe Corner works.
+19. PDF reports download successfully.
+20. Model metrics come from actual held-out testing.
+21. Training and evaluation dashboards show real values.
+22. Prediction history works.
+23. Invalid uploads are handled.
+24. No fabricated results are displayed.
+25. Source code remains accessible.
+26. README and setup instructions are complete.
+
+---
+
+# 25. FINAL EXECUTION INSTRUCTIONS
+
+Now begin building DermaSense AI.
+
+Do not respond with only an implementation plan.
+
+Start by inspecting the environment, then begin creating the actual application.
+
+I want you to take responsibility for:
+
+- Writing the code.
+- Installing compatible dependencies.
+- Downloading the dataset.
+- Processing the dataset.
+- Developing the CNN.
+- Training the CNN.
+- Saving the model.
+- Integrating inference.
+- Implementing Grad-CAM.
+- Creating all frontend pages.
+- Creating all backend APIs.
+- Implementing every additional module.
+- Running tests.
+- Fixing errors.
+- Preparing deployment.
+
+## Dataset download priority
+
+Official PAD-UFES-20 source:
+
+https://data.mendeley.com/datasets/zr7vgbcyr2/1
+
+Attempt automatic download first.
+
+If downloading is not possible, tell me exactly what I need to upload.
+
+Do not invent a dataset or substitute another one.
+
+## Critical JavaScript instruction
+
+Before finishing, inspect the complete codebase.
+
+Verify that:
+
+- Every React component uses `.jsx`.
+- Every JavaScript module uses `.js`.
+- No `.ts` files exist.
+- No `.tsx` files exist.
+- No TypeScript syntax remains.
+- All imports resolve.
+- The frontend and backend communicate correctly.
+
+## Final project delivery
+
+At completion, provide:
+
+1. Working application preview.
+2. Deployment URL, if successfully deployed.
+3. Completed functionality.
+4. Dataset download/import status.
+5. Actual imported image count.
+6. Actual patient and lesion counts, where available.
+7. Six classification categories.
+8. Model architecture.
+9. Actual training configuration.
+10. Whether training completed.
+11. Actual test accuracy, precision, recall and macro-F1.
+12. Confusion matrix.
+13. Per-class performance.
+14. Model artifact location.
+15. Dataset storage location.
+16. Instructions for retraining.
+17. GitHub synchronization instructions.
+18. Remaining limitations.
+
+For every feature, distinguish between:
+
+- Implemented.
+- Tested successfully.
+- Awaiting dataset.
+- Awaiting training.
+- Incomplete.
+- Blocked by environment limitations.
+
+Never present an incomplete feature as complete.
+
+**FINAL GOAL: Build and deliver a complete, professional, genuinely functioning DermaSense AI website using React, JSX, JavaScript, Node.js and TensorFlow.js, with automatic PAD-UFES-20 acquisition where accessible, actual six-class CNN training, real predictions, Grad-CAM explainability, patient-history analysis, Safe Corner, model analytics and PDF reports.**
+
+I want the actual finished application, not merely a generated UI or a collection of source-code files.

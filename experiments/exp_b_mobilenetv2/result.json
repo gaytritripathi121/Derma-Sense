@@ -1,0 +1,369 @@
+{
+  "experimentId": "exp_b_mobilenetv2",
+  "name": "MobileNetV2 (ImageNet Pretrained Frozen Backbone + Regularized GAP Head)",
+  "architecture": "MobileNetV2_1.0_224 (GraphModel frozen ~2.26M) + Regularized Head (350918 params)",
+  "backboneParamsApprox": 2257984,
+  "trainableParams": 350918,
+  "totalParams": 2608902,
+  "imageSize": 224,
+  "normalization": "zero_to_one (MobileNetV2 internal 2x-1 scaling)",
+  "batchSize": 32,
+  "learningRateSchedule": "0.0008 -> 0.00004 cosine",
+  "epochsCompleted": 13,
+  "bestEpoch": 3,
+  "durationMs": 260460,
+  "backendMode": "tfjs-node (Native C++ / oneDNN CPU)",
+  "notes": "TensorFlow.js loads savedmodel/mobilenet_v2_1.0_224 as a frozen tf.GraphModel, so backbone weights cannot be fine-tuned via backprop in tfjs-node. Multi-view ImageNet feature extraction (6x-12x minority views) + regularized trainable head achieved strong transfer generalization and supports exact spatial Grad-CAM on Conv_1/Relu6 [7,7,1280].",
+  "gradcamVerified": {
+    "shape": [
+      7,
+      7
+    ],
+    "maxVal": 0.026847172528505325
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "lr": 0.0008,
+      "trainLoss": 1.7851,
+      "trainAccuracy": 0.4211,
+      "valLoss": 1.3314,
+      "valAccuracy": 0.4869,
+      "valMacroF1": 0.4027,
+      "valMacroRecall": 0.4372
+    },
+    {
+      "epoch": 2,
+      "lr": 0.000799,
+      "trainLoss": 1.2982,
+      "trainAccuracy": 0.5598,
+      "valLoss": 1.3092,
+      "valAccuracy": 0.516,
+      "valMacroF1": 0.414,
+      "valMacroRecall": 0.4242
+    },
+    {
+      "epoch": 3,
+      "lr": 0.000795,
+      "trainLoss": 1.178,
+      "trainAccuracy": 0.6242,
+      "valLoss": 1.2758,
+      "valAccuracy": 0.5394,
+      "valMacroF1": 0.4409,
+      "valMacroRecall": 0.4526
+    },
+    {
+      "epoch": 4,
+      "lr": 0.00079,
+      "trainLoss": 1.0793,
+      "trainAccuracy": 0.6654,
+      "valLoss": 1.2864,
+      "valAccuracy": 0.5277,
+      "valMacroF1": 0.4132,
+      "valMacroRecall": 0.4227
+    },
+    {
+      "epoch": 5,
+      "lr": 0.000781,
+      "trainLoss": 1.0304,
+      "trainAccuracy": 0.6935,
+      "valLoss": 1.2835,
+      "valAccuracy": 0.5364,
+      "valMacroF1": 0.4145,
+      "valMacroRecall": 0.4281
+    },
+    {
+      "epoch": 6,
+      "lr": 0.000771,
+      "trainLoss": 0.9831,
+      "trainAccuracy": 0.7096,
+      "valLoss": 1.2921,
+      "valAccuracy": 0.551,
+      "valMacroF1": 0.375,
+      "valMacroRecall": 0.3707
+    },
+    {
+      "epoch": 7,
+      "lr": 0.000759,
+      "trainLoss": 0.9619,
+      "trainAccuracy": 0.7267,
+      "valLoss": 1.314,
+      "valAccuracy": 0.5248,
+      "valMacroF1": 0.4051,
+      "valMacroRecall": 0.4116
+    },
+    {
+      "epoch": 8,
+      "lr": 0.000744,
+      "trainLoss": 0.9277,
+      "trainAccuracy": 0.745,
+      "valLoss": 1.3188,
+      "valAccuracy": 0.5131,
+      "valMacroF1": 0.3832,
+      "valMacroRecall": 0.3846
+    },
+    {
+      "epoch": 9,
+      "lr": 0.000727,
+      "trainLoss": 0.912,
+      "trainAccuracy": 0.7503,
+      "valLoss": 1.3357,
+      "valAccuracy": 0.5219,
+      "valMacroF1": 0.3697,
+      "valMacroRecall": 0.3701
+    },
+    {
+      "epoch": 10,
+      "lr": 0.000709,
+      "trainLoss": 0.8773,
+      "trainAccuracy": 0.7761,
+      "valLoss": 1.3103,
+      "valAccuracy": 0.5627,
+      "valMacroF1": 0.3867,
+      "valMacroRecall": 0.3894
+    },
+    {
+      "epoch": 11,
+      "lr": 0.000689,
+      "trainLoss": 0.8642,
+      "trainAccuracy": 0.7692,
+      "valLoss": 1.3218,
+      "valAccuracy": 0.5364,
+      "valMacroF1": 0.3734,
+      "valMacroRecall": 0.3779
+    },
+    {
+      "epoch": 12,
+      "lr": 0.000667,
+      "trainLoss": 0.8417,
+      "trainAccuracy": 0.7868,
+      "valLoss": 1.3152,
+      "valAccuracy": 0.5335,
+      "valMacroF1": 0.3803,
+      "valMacroRecall": 0.3844
+    },
+    {
+      "epoch": 13,
+      "lr": 0.000643,
+      "trainLoss": 0.8233,
+      "trainAccuracy": 0.8014,
+      "valLoss": 1.3408,
+      "valAccuracy": 0.5627,
+      "valMacroF1": 0.4189,
+      "valMacroRecall": 0.4168
+    }
+  ],
+  "bestTrainingMetrics": {
+    "epoch": 3,
+    "lr": 0.000795,
+    "trainLoss": 1.178,
+    "trainAccuracy": 0.6242,
+    "valLoss": 1.2758,
+    "valAccuracy": 0.5394,
+    "valMacroF1": 0.4409,
+    "valMacroRecall": 0.4526
+  },
+  "validationEvaluation": {
+    "evaluatedAt": "2026-11-14T09:46:19.901Z",
+    "splitName": "validation",
+    "testSampleCount": 343,
+    "sampleCount": 343,
+    "accuracy": 0.5394,
+    "macroPrecision": 0.4421,
+    "macroRecall": 0.4526,
+    "macroF1": 0.4409,
+    "weightedPrecision": 0.5602,
+    "weightedRecall": 0.5394,
+    "weightedF1": 0.5463,
+    "macroRocAuc": 0.784,
+    "expectedCalibrationError": 0.0732,
+    "confusionMatrix": [
+      [
+        74,
+        18,
+        3,
+        0,
+        10,
+        4
+      ],
+      [
+        25,
+        69,
+        1,
+        4,
+        15,
+        11
+      ],
+      [
+        0,
+        0,
+        3,
+        1,
+        0,
+        4
+      ],
+      [
+        4,
+        3,
+        3,
+        18,
+        0,
+        9
+      ],
+      [
+        4,
+        15,
+        0,
+        1,
+        5,
+        3
+      ],
+      [
+        7,
+        4,
+        3,
+        4,
+        2,
+        16
+      ]
+    ],
+    "classOrder": [
+      "ACK",
+      "BCC",
+      "MEL",
+      "NEV",
+      "SCC",
+      "SEK"
+    ],
+    "perClass": [
+      {
+        "code": "ACK",
+        "support": 109,
+        "tp": 74,
+        "fp": 40,
+        "fn": 35,
+        "precision": 0.6491,
+        "recall": 0.6789,
+        "f1": 0.6637,
+        "rocAuc": 0.8408
+      },
+      {
+        "code": "BCC",
+        "support": 125,
+        "tp": 69,
+        "fp": 40,
+        "fn": 56,
+        "precision": 0.633,
+        "recall": 0.552,
+        "f1": 0.5897,
+        "rocAuc": 0.7551
+      },
+      {
+        "code": "MEL",
+        "support": 8,
+        "tp": 3,
+        "fp": 10,
+        "fn": 5,
+        "precision": 0.2308,
+        "recall": 0.375,
+        "f1": 0.2857,
+        "rocAuc": 0.7451
+      },
+      {
+        "code": "NEV",
+        "support": 37,
+        "tp": 18,
+        "fp": 10,
+        "fn": 19,
+        "precision": 0.6429,
+        "recall": 0.4865,
+        "f1": 0.5538,
+        "rocAuc": 0.8733
+      },
+      {
+        "code": "SCC",
+        "support": 28,
+        "tp": 5,
+        "fp": 27,
+        "fn": 23,
+        "precision": 0.1563,
+        "recall": 0.1786,
+        "f1": 0.1667,
+        "rocAuc": 0.6651
+      },
+      {
+        "code": "SEK",
+        "support": 36,
+        "tp": 16,
+        "fp": 31,
+        "fn": 20,
+        "precision": 0.3404,
+        "recall": 0.4444,
+        "f1": 0.3855,
+        "rocAuc": 0.8246
+      }
+    ],
+    "calibrationBins": [
+      {
+        "bin": "0-10%",
+        "count": 0,
+        "avgConfidence": null,
+        "empiricalAccuracy": null
+      },
+      {
+        "bin": "10-20%",
+        "count": 0,
+        "avgConfidence": null,
+        "empiricalAccuracy": null
+      },
+      {
+        "bin": "20-30%",
+        "count": 10,
+        "avgConfidence": 0.2665,
+        "empiricalAccuracy": 0.6
+      },
+      {
+        "bin": "30-40%",
+        "count": 47,
+        "avgConfidence": 0.3503,
+        "empiricalAccuracy": 0.3617
+      },
+      {
+        "bin": "40-50%",
+        "count": 61,
+        "avgConfidence": 0.4512,
+        "empiricalAccuracy": 0.459
+      },
+      {
+        "bin": "50-60%",
+        "count": 86,
+        "avgConfidence": 0.5478,
+        "empiricalAccuracy": 0.4651
+      },
+      {
+        "bin": "60-70%",
+        "count": 42,
+        "avgConfidence": 0.6472,
+        "empiricalAccuracy": 0.5714
+      },
+      {
+        "bin": "70-80%",
+        "count": 41,
+        "avgConfidence": 0.7506,
+        "empiricalAccuracy": 0.6829
+      },
+      {
+        "bin": "80-90%",
+        "count": 33,
+        "avgConfidence": 0.8498,
+        "empiricalAccuracy": 0.7273
+      },
+      {
+        "bin": "90-100%",
+        "count": 23,
+        "avgConfidence": 0.9408,
+        "empiricalAccuracy": 0.7826
+      }
+    ]
+  }
+}

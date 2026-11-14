@@ -1,0 +1,92 @@
+{
+  "modelVersion": "2.0.0-mobilenetv2",
+  "modelType": "mobilenet_v2_hybrid",
+  "selectedExperimentId": "exp_b_mobilenetv2",
+  "architecture": {
+    "name": "MobileNetV2_1.0_224 (Frozen ImageNet GraphModel + Regularized GAP Head)",
+    "totalParams": 2608902,
+    "backboneParamsApprox": 2257984,
+    "trainableParams": 350918,
+    "convNode": "module_apply_default/MobilenetV2/Conv_1/Relu6",
+    "gradcamLayer": "module_apply_default/MobilenetV2/Conv_1/Relu6",
+    "backboneDir": "backbone",
+    "headDir": "head"
+  },
+  "trainedAt": "2026-11-14T09:46:19.901Z",
+  "evaluatedTestAt": "2026-11-14T12:12:25.513Z",
+  "datasetSource": "https://data.mendeley.com/datasets/zr7vgbcyr2/1",
+  "classMapping": {
+    "0": "ACK",
+    "1": "BCC",
+    "2": "MEL",
+    "3": "NEV",
+    "4": "SCC",
+    "5": "SEK"
+  },
+  "preprocessing": {
+    "imageSize": 224,
+    "channels": 3,
+    "normalization": "zero_to_one",
+    "colorSpace": "RGB",
+    "note": "External [0, 1] RGB; MobileNetV2 GraphModel internally maps 2x - 1 to [-1, 1]."
+  },
+  "trainingConfig": {
+    "epochsCompleted": 13,
+    "bestEpoch": 3,
+    "batchSize": 32,
+    "learningRateSchedule": "0.0008 -> 0.00004 cosine",
+    "optimizer": "Adam",
+    "loss": "Class-Weighted Categorical Cross-Entropy with 0.05 Label Smoothing",
+    "confidenceThreshold": 0.7,
+    "backendMode": "tfjs-node (Native C++ / oneDNN CPU)"
+  },
+  "splitSummary": {
+    "train": {
+      "images": 1611,
+      "patients": 852,
+      "lesions": 1078,
+      "classCounts": {
+        "ACK": 511,
+        "BCC": 595,
+        "MEL": 37,
+        "NEV": 170,
+        "SCC": 134,
+        "SEK": 164
+      }
+    },
+    "val": {
+      "images": 343,
+      "patients": 264,
+      "lesions": 278,
+      "classCounts": {
+        "ACK": 109,
+        "BCC": 125,
+        "MEL": 8,
+        "NEV": 37,
+        "SCC": 28,
+        "SEK": 36
+      }
+    },
+    "test": {
+      "images": 344,
+      "patients": 257,
+      "lesions": 285,
+      "classCounts": {
+        "ACK": 110,
+        "BCC": 125,
+        "MEL": 7,
+        "NEV": 37,
+        "SCC": 30,
+        "SEK": 35
+      }
+    }
+  },
+  "gradcamCheck": {
+    "convNode": "module_apply_default/MobilenetV2/Conv_1/Relu6",
+    "featureMapShape": [
+      7,
+      7
+    ],
+    "maxVal": 0.057077
+  }
+}

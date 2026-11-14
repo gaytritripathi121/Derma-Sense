@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.DS_Store
+data/raw/*.zip
+data/raw/*.csv
+data/raw/images/
+data/processed/
+models/trainedModel/
+models/checkpoints/
+outputs/
+tmp/

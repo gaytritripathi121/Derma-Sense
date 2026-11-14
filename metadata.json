@@ -1,0 +1,6 @@
+{
+  "name": "DermaSense AI",
+  "description": "Explainable CNN-Based Skin Lesion Screening System trained on PAD-UFES-20 with TensorFlow.js and Grad-CAM",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

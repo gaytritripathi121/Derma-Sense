@@ -1,0 +1,435 @@
+{
+  "selectedExperiment": "exp_b_mobilenetv2",
+  "bestEpoch": 3,
+  "patientLeakageVerifiedZero": true,
+  "validationEvaluation": {
+    "evaluatedAt": "2026-11-14T09:46:19.901Z",
+    "splitName": "validation",
+    "testSampleCount": 343,
+    "sampleCount": 343,
+    "accuracy": 0.5394,
+    "macroPrecision": 0.4421,
+    "macroRecall": 0.4526,
+    "macroF1": 0.4409,
+    "weightedPrecision": 0.5602,
+    "weightedRecall": 0.5394,
+    "weightedF1": 0.5463,
+    "macroRocAuc": 0.784,
+    "expectedCalibrationError": 0.0732,
+    "confusionMatrix": [
+      [
+        74,
+        18,
+        3,
+        0,
+        10,
+        4
+      ],
+      [
+        25,
+        69,
+        1,
+        4,
+        15,
+        11
+      ],
+      [
+        0,
+        0,
+        3,
+        1,
+        0,
+        4
+      ],
+      [
+        4,
+        3,
+        3,
+        18,
+        0,
+        9
+      ],
+      [
+        4,
+        15,
+        0,
+        1,
+        5,
+        3
+      ],
+      [
+        7,
+        4,
+        3,
+        4,
+        2,
+        16
+      ]
+    ],
+    "classOrder": [
+      "ACK",
+      "BCC",
+      "MEL",
+      "NEV",
+      "SCC",
+      "SEK"
+    ],
+    "perClass": [
+      {
+        "code": "ACK",
+        "support": 109,
+        "tp": 74,
+        "fp": 40,
+        "fn": 35,
+        "precision": 0.6491,
+        "recall": 0.6789,
+        "f1": 0.6637,
+        "rocAuc": 0.8408
+      },
+      {
+        "code": "BCC",
+        "support": 125,
+        "tp": 69,
+        "fp": 40,
+        "fn": 56,
+        "precision": 0.633,
+        "recall": 0.552,
+        "f1": 0.5897,
+        "rocAuc": 0.7551
+      },
+      {
+        "code": "MEL",
+        "support": 8,
+        "tp": 3,
+        "fp": 10,
+        "fn": 5,
+        "precision": 0.2308,
+        "recall": 0.375,
+        "f1": 0.2857,
+        "rocAuc": 0.7451
+      },
+      {
+        "code": "NEV",
+        "support": 37,
+        "tp": 18,
+        "fp": 10,
+        "fn": 19,
+        "precision": 0.6429,
+        "recall": 0.4865,
+        "f1": 0.5538,
+        "rocAuc": 0.8733
+      },
+      {
+        "code": "SCC",
+        "support": 28,
+        "tp": 5,
+        "fp": 27,
+        "fn": 23,
+        "precision": 0.1563,
+        "recall": 0.1786,
+        "f1": 0.1667,
+        "rocAuc": 0.6651
+      },
+      {
+        "code": "SEK",
+        "support": 36,
+        "tp": 16,
+        "fp": 31,
+        "fn": 20,
+        "precision": 0.3404,
+        "recall": 0.4444,
+        "f1": 0.3855,
+        "rocAuc": 0.8246
+      }
+    ],
+    "calibrationBins": [
+      {
+        "bin": "0-10%",
+        "count": 0,
+        "avgConfidence": null,
+        "empiricalAccuracy": null
+      },
+      {
+        "bin": "10-20%",
+        "count": 0,
+        "avgConfidence": null,
+        "empiricalAccuracy": null
+      },
+      {
+        "bin": "20-30%",
+        "count": 10,
+        "avgConfidence": 0.2665,
+        "empiricalAccuracy": 0.6
+      },
+      {
+        "bin": "30-40%",
+        "count": 47,
+        "avgConfidence": 0.3503,
+        "empiricalAccuracy": 0.3617
+      },
+      {
+        "bin": "40-50%",
+        "count": 61,
+        "avgConfidence": 0.4512,
+        "empiricalAccuracy": 0.459
+      },
+      {
+        "bin": "50-60%",
+        "count": 86,
+        "avgConfidence": 0.5478,
+        "empiricalAccuracy": 0.4651
+      },
+      {
+        "bin": "60-70%",
+        "count": 42,
+        "avgConfidence": 0.6472,
+        "empiricalAccuracy": 0.5714
+      },
+      {
+        "bin": "70-80%",
+        "count": 41,
+        "avgConfidence": 0.7506,
+        "empiricalAccuracy": 0.6829
+      },
+      {
+        "bin": "80-90%",
+        "count": 33,
+        "avgConfidence": 0.8498,
+        "empiricalAccuracy": 0.7273
+      },
+      {
+        "bin": "90-100%",
+        "count": 23,
+        "avgConfidence": 0.9408,
+        "empiricalAccuracy": 0.7826
+      }
+    ]
+  },
+  "testEvaluation": {
+    "evaluatedAt": "2026-11-14T12:12:25.513Z",
+    "splitName": "held_out_test",
+    "testSampleCount": 344,
+    "sampleCount": 344,
+    "accuracy": 0.5465,
+    "macroPrecision": 0.4692,
+    "macroRecall": 0.4946,
+    "macroF1": 0.4727,
+    "weightedPrecision": 0.5659,
+    "weightedRecall": 0.5465,
+    "weightedF1": 0.5527,
+    "macroRocAuc": 0.8168,
+    "expectedCalibrationError": 0.0599,
+    "confusionMatrix": [
+      [
+        72,
+        19,
+        1,
+        4,
+        6,
+        8
+      ],
+      [
+        24,
+        72,
+        0,
+        2,
+        14,
+        13
+      ],
+      [
+        1,
+        0,
+        4,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        4,
+        5,
+        16,
+        0,
+        11
+      ],
+      [
+        5,
+        12,
+        0,
+        1,
+        10,
+        2
+      ],
+      [
+        6,
+        8,
+        2,
+        4,
+        1,
+        14
+      ]
+    ],
+    "classOrder": [
+      "ACK",
+      "BCC",
+      "MEL",
+      "NEV",
+      "SCC",
+      "SEK"
+    ],
+    "perClass": [
+      {
+        "code": "ACK",
+        "support": 110,
+        "tp": 72,
+        "fp": 37,
+        "fn": 38,
+        "precision": 0.6606,
+        "recall": 0.6545,
+        "f1": 0.6575,
+        "rocAuc": 0.8167
+      },
+      {
+        "code": "BCC",
+        "support": 125,
+        "tp": 72,
+        "fp": 43,
+        "fn": 53,
+        "precision": 0.6261,
+        "recall": 0.576,
+        "f1": 0.6,
+        "rocAuc": 0.7721
+      },
+      {
+        "code": "MEL",
+        "support": 7,
+        "tp": 4,
+        "fp": 8,
+        "fn": 3,
+        "precision": 0.3333,
+        "recall": 0.5714,
+        "f1": 0.4211,
+        "rocAuc": 0.9428
+      },
+      {
+        "code": "NEV",
+        "support": 37,
+        "tp": 16,
+        "fp": 11,
+        "fn": 21,
+        "precision": 0.5926,
+        "recall": 0.4324,
+        "f1": 0.5,
+        "rocAuc": 0.8685
+      },
+      {
+        "code": "SCC",
+        "support": 30,
+        "tp": 10,
+        "fp": 21,
+        "fn": 20,
+        "precision": 0.3226,
+        "recall": 0.3333,
+        "f1": 0.3279,
+        "rocAuc": 0.7111
+      },
+      {
+        "code": "SEK",
+        "support": 35,
+        "tp": 14,
+        "fp": 36,
+        "fn": 21,
+        "precision": 0.28,
+        "recall": 0.4,
+        "f1": 0.3294,
+        "rocAuc": 0.7896
+      }
+    ],
+    "calibrationBins": [
+      {
+        "bin": "0-10%",
+        "count": 0,
+        "avgConfidence": null,
+        "empiricalAccuracy": null
+      },
+      {
+        "bin": "10-20%",
+        "count": 0,
+        "avgConfidence": null,
+        "empiricalAccuracy": null
+      },
+      {
+        "bin": "20-30%",
+        "count": 14,
+        "avgConfidence": 0.2588,
+        "empiricalAccuracy": 0.2857
+      },
+      {
+        "bin": "30-40%",
+        "count": 63,
+        "avgConfidence": 0.361,
+        "empiricalAccuracy": 0.4444
+      },
+      {
+        "bin": "40-50%",
+        "count": 75,
+        "avgConfidence": 0.45,
+        "empiricalAccuracy": 0.4933
+      },
+      {
+        "bin": "50-60%",
+        "count": 66,
+        "avgConfidence": 0.5507,
+        "empiricalAccuracy": 0.5303
+      },
+      {
+        "bin": "60-70%",
+        "count": 52,
+        "avgConfidence": 0.64,
+        "empiricalAccuracy": 0.6346
+      },
+      {
+        "bin": "70-80%",
+        "count": 30,
+        "avgConfidence": 0.7459,
+        "empiricalAccuracy": 0.5667
+      },
+      {
+        "bin": "80-90%",
+        "count": 30,
+        "avgConfidence": 0.8501,
+        "empiricalAccuracy": 0.7333
+      },
+      {
+        "bin": "90-100%",
+        "count": 14,
+        "avgConfidence": 0.9438,
+        "empiricalAccuracy": 0.8571
+      }
+    ]
+  },
+  "highRiskSpotlight": {
+    "MEL": {
+      "code": "MEL",
+      "support": 7,
+      "tp": 4,
+      "fp": 8,
+      "fn": 3,
+      "precision": 0.3333,
+      "recall": 0.5714,
+      "f1": 0.4211,
+      "rocAuc": 0.9428
+    },
+    "SCC": {
+      "code": "SCC",
+      "support": 30,
+      "tp": 10,
+      "fp": 21,
+      "fn": 20,
+      "precision": 0.3226,
+      "recall": 0.3333,
+      "f1": 0.3279,
+      "rocAuc": 0.7111
+    }
+  }
+}

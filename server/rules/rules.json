@@ -1,0 +1,114 @@
+[
+  {
+    "ruleId": "RULE_CHANGING_LESION",
+    "title": "Recent Change in Lesion Appearance",
+    "field": "changed",
+    "expected": "YES",
+    "severity": "HIGH_ATTENTION",
+    "explanation": "Patient reports recent changes in the lesion's appearance (color, shape, or border). Evolving lesions ('E' in ABCDE criteria) are a primary clinical indication for dermatological evaluation.",
+    "suggestedNextStep": "Schedule a prompt in-person dermatological examination and bring any prior photos for comparison."
+  },
+  {
+    "ruleId": "RULE_BLEEDING_LESION",
+    "title": "Spontaneous or Recurrent Bleeding",
+    "field": "bleed",
+    "expected": "YES",
+    "severity": "HIGH_ATTENTION",
+    "explanation": "Lesion bleeding or crusting without major trauma can reflect epidermal fragility or ulceration seen in basal cell carcinoma, squamous cell carcinoma, or nodular melanoma.",
+    "suggestedNextStep": "Seek timely clinical evaluation by a dermatologist; avoid picking or applying home remedies."
+  },
+  {
+    "ruleId": "RULE_GROWING_LESION",
+    "title": "Progressive Lesion Growth",
+    "field": "grew",
+    "expected": "YES",
+    "severity": "HIGH_ATTENTION",
+    "explanation": "Reported increase in lesion size warrants clinical assessment, particularly when combined with pigmentation changes or surface elevation.",
+    "suggestedNextStep": "Arrange an in-person skin exam to measure and monitor lesion dimensions with dermoscopy."
+  },
+  {
+    "ruleId": "RULE_LARGE_DIAMETER",
+    "title": "Diameter >= 6 mm",
+    "field": "diameterMm",
+    "operator": "GTE",
+    "value": 6,
+    "severity": "MODERATE_ATTENTION",
+    "explanation": "A lesion diameter of 6 mm or greater aligns with the 'D' threshold in ABCDE melanoma screening guidelines, though smaller lesions can also be malignant.",
+    "suggestedNextStep": "Include lesion measurement during your dermatological consultation."
+  },
+  {
+    "ruleId": "RULE_PERSONAL_SKIN_CANCER_HISTORY",
+    "title": "Personal History of Skin Cancer",
+    "field": "personalSkinCancerHistory",
+    "expected": "YES",
+    "severity": "HIGH_ATTENTION",
+    "explanation": "Prior skin cancer significantly increases baseline risk for subsequent cutaneous malignancies (both melanoma and keratinocyte carcinomas).",
+    "suggestedNextStep": "Maintain scheduled full-body skin surveillance with a dermatologist."
+  },
+  {
+    "ruleId": "RULE_FAMILY_SKIN_CANCER_HISTORY",
+    "title": "Family History of Skin Cancer",
+    "field": "familySkinCancerHistory",
+    "expected": "YES",
+    "severity": "MODERATE_ATTENTION",
+    "explanation": "A family history of skin cancer (especially melanoma in first-degree relatives) is an established inherited and shared-exposure risk factor.",
+    "suggestedNextStep": "Mention family history during clinical screening and practice consistent photoprotection."
+  },
+  {
+    "ruleId": "RULE_PAIN_TENDERNESS",
+    "title": "Lesion Pain or Tenderness",
+    "field": "hurt",
+    "expected": "YES",
+    "severity": "MODERATE_ATTENTION",
+    "explanation": "Tenderness or pain on palpation can occur with inflamed lesions, squamous cell carcinoma, or rapidly expanding nodules.",
+    "suggestedNextStep": "Have a clinician inspect the tender lesion in person."
+  },
+  {
+    "ruleId": "RULE_PERSISTENT_ITCH",
+    "title": "Persistent or Moderate-to-Severe Itching",
+    "field": "itch",
+    "expected": "YES",
+    "severity": "MODERATE_ATTENTION",
+    "explanation": "Localized pruritus can be associated with actinic keratoses, inflammatory lesions, or symptomatic superficial malignancies.",
+    "suggestedNextStep": "Avoid scratching and mention itching duration to your physician."
+  },
+  {
+    "ruleId": "RULE_ELEVATED_APPEARANCE",
+    "title": "Elevated / Raised Surface",
+    "field": "elevation",
+    "expected": "YES",
+    "severity": "INFORMATIONAL",
+    "explanation": "Elevation is seen across both benign lesions (seborrheic keratosis, dermal nevus) and nodular malignancies (BCC, SCC, nodular melanoma).",
+    "suggestedNextStep": "Evaluate elevation alongside border, color, and change history."
+  },
+  {
+    "ruleId": "RULE_FAIR_SKIN_PHOTOTYPE",
+    "title": "UV-Sensitive Fitzpatrick Phototype (I–II)",
+    "field": "fitzpatrickType",
+    "operator": "IN",
+    "value": ["1", "2"],
+    "severity": "INFORMATIONAL",
+    "explanation": "Fitzpatrick skin types I and II burn easily and tan minimally, carrying elevated lifetime UV sensitivity.",
+    "suggestedNextStep": "Prioritize daily broad-spectrum SPF 30+ sunscreen and protective clothing."
+  },
+  {
+    "ruleId": "RULE_HIGH_EXPOSURE_REGION",
+    "title": "Chronically Sun-Exposed Anatomical Site",
+    "field": "region",
+    "operator": "IN",
+    "value": ["FACE", "SCALP", "EAR", "NECK", "FOREARM", "HAND", "LIP", "NOSE"],
+    "severity": "INFORMATIONAL",
+    "explanation": "Chronically sun-exposed sites experience higher cumulative UV radiation and higher incidence of ACK, BCC, and SCC.",
+    "suggestedNextStep": "Include high-exposure anatomical sites in routine skin examinations."
+  },
+  {
+    "ruleId": "RULE_OLDER_AGE_CONTEXT",
+    "title": "Age >= 60 Years",
+    "field": "age",
+    "operator": "GTE",
+    "value": 60,
+    "severity": "INFORMATIONAL",
+    "explanation": "Cumulative sun damage over decades increases the baseline prevalence of actinic keratosis, keratinocyte carcinomas, and seborrheic keratosis.",
+    "suggestedNextStep": "Schedule periodic preventive skin checks with a healthcare provider."
+  }
+]
