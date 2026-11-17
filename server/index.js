@@ -1,10 +1,17 @@
 import 'dotenv/config';
+if (!process.env.TF_CPP_MIN_LOG_LEVEL) {
+  process.env.TF_CPP_MIN_LOG_LEVEL = '2';
+}
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PATHS } from './config/constants.js';
+import { buildCorsOptions } from './config/cors.js';
+import { connectDatabase, getDatabaseStatus, isDatabaseConfigured } from './db/connection.js';
+import { attachAuthUser } from './middleware/auth.js';
+import authRoutes from './routes/authRoutes.js';
 import predictionRoutes from './routes/predictionRoutes.js';
 import modelRoutes from './routes/modelRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
@@ -65,24 +72,36 @@ function cleanTempFolderOnBoot() {
 
 async function startServer() {
   cleanTempFolderOnBoot();
+  const isProd = process.env.NODE_ENV === 'production';
+  if (isProd && isDatabaseConfigured() && !process.env.SESSION_SECRET) {
+    console.warn(
+      'WARNING: SESSION_SECRET is not set in production. Set a strong random SESSION_SECRET before enabling user accounts.'
+    );
+  }
+  await connectDatabase();
 
   const app = express();
   const port = Number(process.env.PORT || 3000);
-  const isProd = process.env.NODE_ENV === 'production';
 
-  app.use(cors({ origin: true, credentials: true }));
+  app.set('trust proxy', 1);
+  app.use(cors(buildCorsOptions(isProd)));
   app.use(express.json({ limit: '25mb' }));
   app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+  app.use(attachAuthUser);
 
   app.get('/api/health', (req, res) => {
+    const db = getDatabaseStatus();
     res.json({
       status: 'ok',
       service: 'DermaSense AI',
       environment: isProd ? 'production' : 'development',
+      databaseConfigured: db.databaseConfigured,
+      databaseConnected: db.databaseConnected,
       timestamp: new Date().toISOString(),
     });
   });
 
+  app.use('/api/auth', authRoutes);
   app.use('/api/model', modelRoutes);
   app.use('/api/reports', reportRoutes);
   app.use('/api', predictionRoutes);

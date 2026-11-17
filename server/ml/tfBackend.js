@@ -7,6 +7,9 @@ export async function getTF() {
   if (tfInstance) return { tf: tfInstance, backendMode };
 
   try {
+    if (!process.env.TF_CPP_MIN_LOG_LEVEL) {
+      process.env.TF_CPP_MIN_LOG_LEVEL = '2';
+    }
     const tfNode = await import('@tensorflow/tfjs-node');
     tfInstance = tfNode.default || tfNode;
     backendMode = 'tfjs-node (Native C++ / oneDNN CPU)';

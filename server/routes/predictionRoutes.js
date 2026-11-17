@@ -3,6 +3,15 @@ import multer from 'multer';
 import { z } from 'zod';
 import { patientHistorySchema } from '../../src/utils/validation.js';
 import { runPrediction } from '../ml/predict.js';
+import { isDatabaseConnected } from '../db/connection.js';
+import {
+  clearUserScreenings,
+  deleteUserScreeningByReportId,
+  formatSavedRecordForFrontend,
+  getUserScreeningByReportId,
+  getUserScreenings,
+  saveUserScreening,
+} from '../services/authService.js';
 import {
   addPredictionToSession,
   clearSessionHistory,
@@ -73,34 +82,109 @@ router.post('/predict', memoryUpload.single('image'), async (req, res, next) => 
     });
 
     addPredictionToSession(sid, result);
-    return res.json(result);
+
+    let savedToAccount = false;
+    if (req.user && isDatabaseConnected()) {
+      try {
+        await saveUserScreening(req.user.id, result);
+        savedToAccount = true;
+      } catch (saveErr) {
+        console.error('Failed to save screening to authenticated user account:', saveErr.message);
+      }
+    }
+
+    return res.json({
+      ...result,
+      savedToAccount,
+    });
   } catch (err) {
     return next(err);
   }
 });
 
-router.get('/history', (req, res) => {
-  const sid = getOrCreateSessionId(req, res);
-  res.json({
-    sessionScoped: true,
-    retentionPolicy: 'Ephemeral session memory only; cleared when browser session resets or cleared manually.',
-    items: getSessionHistory(sid),
-  });
-});
+router.get('/history', async (req, res, next) => {
+  try {
+    const sid = getOrCreateSessionId(req, res);
 
-router.get('/history/:reportId', (req, res) => {
-  const sid = getOrCreateSessionId(req, res);
-  const record = getSessionRecordById(sid, req.params.reportId);
-  if (!record) {
-    return res.status(404).json({ error: 'Screening record not found in current session.' });
+    if (req.user && isDatabaseConnected()) {
+      const accountItems = await getUserScreenings(req.user.id);
+      const enriched = accountItems.map((item) => {
+        const sessionMatch = getSessionRecordById(sid, item.reportId);
+        return {
+          ...item,
+          thumbnailBase64: sessionMatch?.gradcam?.originalBase64 || null,
+        };
+      });
+      return res.json({
+        sessionScoped: false,
+        accountScoped: true,
+        retentionPolicy:
+          'Saved to your DermaSense AI account without storing uploaded skin photographs.',
+        items: enriched,
+      });
+    }
+
+    return res.json({
+      sessionScoped: true,
+      accountScoped: false,
+      retentionPolicy:
+        'Ephemeral session memory only; cleared when browser session resets or cleared manually.',
+      items: getSessionHistory(sid),
+    });
+  } catch (err) {
+    return next(err);
   }
-  return res.json(record);
 });
 
-router.delete('/history', (req, res) => {
-  const sid = getOrCreateSessionId(req, res);
-  clearSessionHistory(sid);
-  res.json({ cleared: true });
+router.get('/history/:reportId', async (req, res, next) => {
+  try {
+    const sid = getOrCreateSessionId(req, res);
+
+    if (req.user && isDatabaseConnected()) {
+      const savedDoc = await getUserScreeningByReportId(req.user.id, req.params.reportId);
+      if (!savedDoc) {
+        return res.status(404).json({ error: 'Screening record not found for your account.' });
+      }
+      const sessionMatch = getSessionRecordById(sid, req.params.reportId);
+      return res.json(formatSavedRecordForFrontend(savedDoc, sessionMatch));
+    }
+
+    const record = getSessionRecordById(sid, req.params.reportId);
+    if (!record) {
+      return res.status(404).json({ error: 'Screening record not found in current session.' });
+    }
+    return res.json(record);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.delete('/history/:reportId', async (req, res, next) => {
+  try {
+    if (req.user && isDatabaseConnected()) {
+      const deleted = await deleteUserScreeningByReportId(req.user.id, req.params.reportId);
+      if (!deleted) {
+        return res.status(404).json({ error: 'Screening record not found for your account.' });
+      }
+      return res.json({ deleted: true });
+    }
+    return res.status(401).json({ error: 'Authentication required to delete a saved record.' });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.delete('/history', async (req, res, next) => {
+  try {
+    const sid = getOrCreateSessionId(req, res);
+    clearSessionHistory(sid);
+    if (req.user && isDatabaseConnected()) {
+      await clearUserScreenings(req.user.id);
+    }
+    return res.json({ cleared: true });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 const safeCornerPlanSchema = z.object({

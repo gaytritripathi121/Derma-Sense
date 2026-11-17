@@ -10,10 +10,10 @@ export default function About() {
       >
         <div className="space-y-4 text-sm text-slate-600 leading-relaxed max-w-3xl">
           <p>
-            DermaSense AI demonstrates an end-to-end explainable skin lesion screening pipeline trained directly in JavaScript using <span className="font-mono text-xs text-slate-900">@tensorflow/tfjs-node</span> on the official Mendeley PAD-UFES-20 clinical smartphone photography dataset.
+            DermaSense AI is an educational skin-lesion screening and awareness tool—not a medical diagnostic system. It demonstrates an end-to-end explainable screening pipeline trained directly in JavaScript using <span className="font-mono text-xs text-slate-900">@tensorflow/tfjs-node</span> on the official Mendeley PAD-UFES-20 clinical smartphone photography dataset.
           </p>
           <p>
-            To prevent patient-level and lesion-level memorization leakage, records are grouped via disjoint Union-Find clustering across both <span className="font-mono text-xs text-slate-900">patient_id</span> and <span className="font-mono text-xs text-slate-900">lesion_id</span> before stratified 70% train / 15% validation / 15% held-out test splitting.
+            To prevent patient-level and lesion-level overlap during training preparation, records are grouped via disjoint Union-Find clustering across both <span className="font-mono text-xs text-slate-900">patient_id</span> and <span className="font-mono text-xs text-slate-900">lesion_id</span>. Individual prediction confidence reported during screening reflects single-image class score concentration for uncertainty gating, not overall diagnostic accuracy.
           </p>
         </div>
       </DashboardCard>

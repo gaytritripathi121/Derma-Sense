@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { AlertTriangle, ArrowRight } from 'lucide-react';
 import DashboardCard from '../components/DashboardCard.jsx';
 import { modelApi } from '../services/api.js';
-import { formatNumber, formatPercent } from '../utils/formatting.js';
+import { CLASS_CODES } from '../data/classMapping.js';
+import { DISEASE_INFO } from '../data/diseaseInfo.js';
 
 export default function Home({ currentPrediction }) {
   const [metricsData, setMetricsData] = useState(null);
@@ -25,8 +26,6 @@ export default function Home({ currentPrediction }) {
     };
   }, []);
 
-  const evalMetrics = metricsData?.evaluation || null;
-
   return (
     <div className="space-y-8">
       <div className="rounded-xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-950">
@@ -34,10 +33,10 @@ export default function Home({ currentPrediction }) {
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
           <div>
             <div className="font-semibold">
-              Experimental Academic Screening Tool — Not a Medical Diagnosis
+              Educational Skin-Lesion Screening &amp; Awareness Tool — Not a Medical Diagnostic System
             </div>
             <p className="mt-1 text-amber-900 leading-relaxed">
-              DermaSense AI screens clinical skin lesion photographs across six dermatological categories using a trained convolutional neural network and Grad-CAM visual attribution. Predictions are preliminary, model confidence is not diagnostic probability, and a benign-looking result never rules out skin cancer. Always consult a qualified dermatologist.
+              DermaSense AI screens clinical skin lesion photographs across six dermatological categories using a trained convolutional neural network and Grad-CAM visual explanations. Individual prediction confidence reflects model score concentration on a single image—not overall diagnostic accuracy—and a benign-looking result never rules out skin cancer. Always consult a qualified dermatologist.
             </p>
           </div>
         </div>
@@ -47,13 +46,13 @@ export default function Home({ currentPrediction }) {
         <div className="lg:col-span-8 flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-7">
           <div>
             <div className="text-xs font-medium text-slate-500">
-              Explainable Dermatological Screening · PAD-UFES-20 Six-Class CNN · Grad-CAM
+              Explainable Dermatological Screening · Six-Class CNN · Grad-CAM Visual Explanations
             </div>
             <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 text-balance">
               Explainable Six-Class Skin Lesion Screening &amp; Care Companion
             </h1>
             <p className="mt-3 max-w-2xl text-base text-slate-600 leading-relaxed">
-              Upload a clinical skin lesion photograph and optional symptom history to receive an automated six-class CNN screening assessment (ACK, BCC, MEL, NEV, SCC, SEK), Grad-CAM spatial attribution maps, independent clinical context flags, Safe Corner preventive routines, and a downloadable PDF screening report.
+              Upload a clinical skin lesion photograph and optional symptom history to receive an automated six-class CNN screening assessment (ACK, BCC, MEL, NEV, SCC, SEK), Grad-CAM spatial attribution maps, independent clinical context flags, Safe Corner preventive routines, and a downloadable PDF screening summary.
             </p>
           </div>
 
@@ -83,7 +82,7 @@ export default function Home({ currentPrediction }) {
         <div className="lg:col-span-4 rounded-xl border border-slate-200 bg-white p-6 flex flex-col justify-between">
           <div>
             <h2 className="text-sm font-semibold text-slate-900">Screening System Overview</h2>
-            <p className="mt-1 text-xs text-slate-500">Integrated clinical screening parameters</p>
+            <p className="mt-1 text-xs text-slate-500">Integrated educational screening parameters</p>
 
             <dl className="mt-5 space-y-4 text-sm">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -97,11 +96,11 @@ export default function Home({ currentPrediction }) {
                 </dd>
               </div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <dt className="text-slate-600">Target Categories</dt>
-                <dd className="font-mono tabular-nums font-medium text-slate-900">6 Classes</dd>
+                <dt className="text-slate-600">Supported Categories</dt>
+                <dd className="font-mono tabular-nums font-medium text-slate-900">6 Lesion Types</dd>
               </div>
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <dt className="text-slate-600">Confidence Safety Gate</dt>
+                <dt className="text-slate-600">Individual Confidence Gate</dt>
                 <dd className="font-mono tabular-nums font-medium text-slate-900">70.0%</dd>
               </div>
               <div className="flex items-center justify-between">
@@ -122,42 +121,54 @@ export default function Home({ currentPrediction }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          {
-            label: 'Held-Out Test Accuracy',
-            value: evalMetrics ? formatPercent(evalMetrics.accuracy, 2) : '—',
-            detail: evalMetrics
-              ? `Evaluated on ${formatNumber(evalMetrics.testSampleCount)} unseen clinical images`
-              : 'Verified held-out evaluation',
-          },
-          {
-            label: 'Held-Out Macro-F1',
-            value: evalMetrics ? formatPercent(evalMetrics.macroF1, 2) : '—',
-            detail: evalMetrics
-              ? `Macro-Recall ${formatPercent(evalMetrics.macroRecall, 2)}`
-              : 'Balanced 6-class evaluation score',
-          },
-          {
-            label: 'Macro ROC-AUC',
-            value: evalMetrics?.macroRocAuc ? evalMetrics.macroRocAuc.toFixed(3) : '—',
-            detail: 'One-vs-rest six-class discrimination',
-          },
-          {
-            label: 'Target Screening Classes',
-            value: '6 Classes',
-            detail: 'ACK · BCC · MEL · NEV · SCC · SEK',
-          },
-        ].map((kpi) => (
-          <div key={kpi.label} className="rounded-xl border border-slate-200 bg-white p-5">
-            <div className="text-xs font-medium text-slate-500">{kpi.label}</div>
-            <div className="mt-2 text-2xl font-bold font-mono tabular-nums text-slate-900">
-              {kpi.value}
-            </div>
-            <div className="mt-1 text-xs text-slate-500">{kpi.detail}</div>
-          </div>
-        ))}
-      </div>
+      <DashboardCard
+        title="Six Supported Skin Lesion Categories"
+        subtitle="Educational screening categories derived from the PAD-UFES-20 clinical dermatology dataset."
+        action={
+          <Link
+            to="/diseases"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800 whitespace-nowrap"
+          >
+            Full Condition Guide
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        }
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {CLASS_CODES.map((code) => {
+            const item = DISEASE_INFO[code];
+            const isMalignant = item.group === 'Malignant skin cancer';
+            const isPrecancer = item.group === 'Precancerous lesion';
+            return (
+              <div
+                key={code}
+                className="flex flex-col justify-between rounded-lg border border-slate-200 bg-slate-50 p-4"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-sm font-bold text-slate-900">{item.code}</span>
+                    <span
+                      className={`text-xs font-medium ${
+                        isMalignant
+                          ? 'text-rose-700'
+                          : isPrecancer
+                            ? 'text-amber-700'
+                            : 'text-emerald-700'
+                      }`}
+                    >
+                      {item.group}
+                    </span>
+                  </div>
+                  <div className="mt-1 text-sm font-semibold text-slate-900">{item.fullName}</div>
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed line-clamp-3">
+                    {item.summary}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </DashboardCard>
 
       <DashboardCard
         title="How Clinical Screening Works"

@@ -10,10 +10,13 @@ export function getOrCreateSessionId(req, res) {
   let sid = match ? match[1] : null;
   if (!sid) {
     sid = crypto.randomBytes(16).toString('hex');
-    res.setHeader(
-      'Set-Cookie',
-      `ds_session=${sid}; Path=/; HttpOnly; SameSite=Lax`
-    );
+    const isHttps =
+      process.env.NODE_ENV === 'production' ||
+      req.secure ||
+      String(req.headers['x-forwarded-proto'] || '').includes('https');
+    const parts = [`ds_session=${sid}`, 'Path=/', 'HttpOnly', 'SameSite=Lax'];
+    if (isHttps) parts.push('Secure');
+    res.append('Set-Cookie', parts.join('; '));
   }
   if (!sessionBuckets.has(sid)) {
     if (sessionBuckets.size >= MAX_SESSIONS) {

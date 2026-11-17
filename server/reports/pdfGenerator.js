@@ -1,6 +1,5 @@
 import { jsPDF } from 'jspdf';
 import { MENDELEY_DATASET_INFO } from '../config/constants.js';
-import { getActiveEvaluationMetrics } from '../ml/model.js';
 import { DISEASE_INFO } from '../../src/data/diseaseInfo.js';
 import { generateSafeCornerPlan } from '../safeCorner/planner.js';
 
@@ -104,30 +103,38 @@ export function generateScreeningPdfBuffer(record) {
   y += 8;
 
   addSectionTitle('2. Uploaded Lesion Image & Grad-CAM Explainability');
-  ensureSpace(150);
-  const imgSize = 148;
-  const gap = (contentW - imgSize * 3) / 2;
   const origB64 = cleanBase64Payload(record.gradcam?.originalBase64);
   const heatB64 = cleanBase64Payload(record.gradcam?.heatmapBase64);
   const overB64 = cleanBase64Payload(record.gradcam?.overlayBase64);
 
-  if (origB64) doc.addImage(origB64, 'PNG', margin, y, imgSize, imgSize);
-  if (heatB64) doc.addImage(heatB64, 'PNG', margin + imgSize + gap, y, imgSize, imgSize);
-  if (overB64) doc.addImage(overB64, 'PNG', margin + (imgSize + gap) * 2, y, imgSize, imgSize);
+  if (origB64 || heatB64 || overB64) {
+    ensureSpace(150);
+    const imgSize = 148;
+    const gap = (contentW - imgSize * 3) / 2;
 
-  y += imgSize + 12;
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(71, 85, 105);
-  doc.text('Original Input', margin + 40, y);
-  doc.text('Grad-CAM Heatmap', margin + imgSize + gap + 30, y);
-  doc.text('Combined Overlay', margin + (imgSize + gap) * 2 + 32, y);
-  y += 14;
-  addBodyLine(
-    record.gradcam?.explanationNote ||
-      'Highlighted regions indicate image areas that contributed to the model prediction. This visualization does not establish medical significance or provide clinical proof.',
-    { size: 8.5 }
-  );
+    if (origB64) doc.addImage(origB64, 'PNG', margin, y, imgSize, imgSize);
+    if (heatB64) doc.addImage(heatB64, 'PNG', margin + imgSize + gap, y, imgSize, imgSize);
+    if (overB64) doc.addImage(overB64, 'PNG', margin + (imgSize + gap) * 2, y, imgSize, imgSize);
+
+    y += imgSize + 12;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(71, 85, 105);
+    doc.text('Original Input', margin + 40, y);
+    doc.text('Grad-CAM Heatmap', margin + imgSize + gap + 30, y);
+    doc.text('Combined Overlay', margin + (imgSize + gap) * 2 + 32, y);
+    y += 14;
+    addBodyLine(
+      record.gradcam?.explanationNote ||
+        'Highlighted regions indicate image areas that contributed to the model prediction. This visualization does not establish medical significance or provide clinical proof.',
+      { size: 8.5 }
+    );
+  } else {
+    addBodyLine(
+      'Uploaded skin photographs and Grad-CAM image overlays are not stored permanently in account history to protect your privacy.',
+      { size: 8.5 }
+    );
+  }
   y += 8;
 
   addSectionTitle('3. Patient-History Summary & Independent Contextual Flags');
@@ -185,19 +192,14 @@ export function generateScreeningPdfBuffer(record) {
   }
   y += 8;
 
-  addSectionTitle('5. Model Provenance & Held-Out Test Performance');
+  addSectionTitle('5. Screening System Provenance & Educational Notice');
   addBodyLine(
     `Dataset Source: PAD-UFES-20 (${MENDELEY_DATASET_INFO.sourcePage})   |   Model Version: ${record.modelVersion}`
   );
-  const activeMetrics = getActiveEvaluationMetrics();
-  if (activeMetrics) {
-    addBodyLine(
-      `Held-Out Test Metrics (n=${activeMetrics.testSampleCount}): Accuracy ${(activeMetrics.accuracy * 100).toFixed(2)}% | Macro-Precision ${(activeMetrics.macroPrecision * 100).toFixed(2)}% | Macro-Recall ${(activeMetrics.macroRecall * 100).toFixed(2)}% | Macro-F1 ${(activeMetrics.macroF1 * 100).toFixed(2)}%`,
-      { size: 9 }
-    );
-  } else {
-    addBodyLine('Held-out evaluation metrics have not been recorded yet.');
-  }
+  addBodyLine(
+    'Note: Individual prediction confidence reflects softmax score concentration on this single photograph for uncertainty gating and does not represent overall diagnostic accuracy. This summary supports educational awareness and professional dermatology consultation.',
+    { size: 8.5 }
+  );
 
   const arrayBuffer = doc.output('arraybuffer');
   return Buffer.from(arrayBuffer);

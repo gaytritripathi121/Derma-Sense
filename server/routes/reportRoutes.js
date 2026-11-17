@@ -1,16 +1,24 @@
 import express from 'express';
+import { isDatabaseConnected } from '../db/connection.js';
 import { generateScreeningPdfBuffer } from '../reports/pdfGenerator.js';
+import { formatSavedRecordForFrontend, getUserScreeningByReportId } from '../services/authService.js';
 import { getOrCreateSessionId, getSessionRecordById } from '../services/sessionStore.js';
 
 const router = express.Router();
 
-router.post('/generate', (req, res, next) => {
+router.post('/generate', async (req, res, next) => {
   try {
     const sid = getOrCreateSessionId(req, res);
     let record = req.body?.record || null;
 
     if (!record && req.body?.reportId) {
       record = getSessionRecordById(sid, req.body.reportId);
+      if (!record && req.user && isDatabaseConnected()) {
+        const savedDoc = await getUserScreeningByReportId(req.user.id, req.body.reportId);
+        if (savedDoc) {
+          record = formatSavedRecordForFrontend(savedDoc, null);
+        }
+      }
     }
 
     if (!record || !record.predictedClass) {

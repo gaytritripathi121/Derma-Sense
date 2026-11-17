@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, Download, Eye, HeartHandshake } from 'lucide-react';
+import { AlertTriangle, Download, Eye, HeartHandshake, UserPlus } from 'lucide-react';
 import DashboardCard from '../components/DashboardCard.jsx';
 import ConfidenceChart from '../components/ConfidenceChart.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { DISEASE_INFO } from '../data/diseaseInfo.js';
 import { reportService } from '../services/reportService.js';
 import { formatDateTime } from '../utils/formatting.js';
 
 export default function Results({ prediction }) {
+  const { user } = useAuth();
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [pdfError, setPdfError] = useState('');
 
@@ -65,6 +67,29 @@ export default function Results({ prediction }) {
         </div>
       )}
 
+      {!user && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-blue-200 bg-blue-50/70 px-5 py-3.5 text-xs text-blue-950">
+          <div className="flex items-center gap-2.5">
+            <UserPlus className="h-4 w-4 shrink-0 text-blue-700" />
+            <span>Create a free account to save your screening history and access it later.</span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              to="/register"
+              className="rounded-lg bg-blue-600 px-3 py-1.5 font-medium text-white hover:bg-blue-700 whitespace-nowrap"
+            >
+              Sign Up Free
+            </Link>
+            <Link
+              to="/login"
+              className="rounded-lg border border-blue-300 bg-white px-3 py-1.5 font-medium text-blue-800 hover:bg-blue-50 whitespace-nowrap"
+            >
+              Log In
+            </Link>
+          </div>
+        </div>
+      )}
+
       {pdfError && (
         <div className="rounded-xl border border-rose-200 bg-rose-50 px-5 py-3 text-sm text-rose-800">
           {pdfError}
@@ -86,13 +111,16 @@ export default function Results({ prediction }) {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-xs text-slate-500">Top Softmax Confidence</div>
+              <div className="text-xs text-slate-500">Individual Prediction Confidence</div>
               <div
                 className={`mt-1 text-3xl font-bold font-mono tabular-nums ${
                   isLowConfidence ? 'text-amber-700' : 'text-blue-700'
                 }`}
               >
                 {prediction.confidencePercentage}%
+              </div>
+              <div className="mt-0.5 text-[11px] text-slate-500">
+                Single-image score (not diagnostic accuracy)
               </div>
             </div>
           </div>
@@ -142,31 +170,39 @@ export default function Results({ prediction }) {
 
         <div className="lg:col-span-5 rounded-xl border border-slate-200 bg-white p-6">
           <h2 className="text-base font-semibold text-slate-900">Grad-CAM Visual Attribution Preview</h2>
-          <p className="mt-1 text-xs text-slate-500">
-            Layer: <span className="font-mono">{prediction.gradcam?.layerName}</span> · Does not prove clinical significance
-          </p>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-              <div className="border-b border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
-                Original Input
+          {prediction.gradcam?.originalBase64 ? (
+            <>
+              <p className="mt-1 text-xs text-slate-500">
+                Layer: <span className="font-mono">{prediction.gradcam?.layerName}</span> · Does not prove clinical significance
+              </p>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                  <div className="border-b border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                    Original Input
+                  </div>
+                  <img
+                    src={prediction.gradcam?.originalBase64}
+                    alt="Original lesion input"
+                    className="aspect-square w-full object-cover"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                  <div className="border-b border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                    Grad-CAM Overlay
+                  </div>
+                  <img
+                    src={prediction.gradcam?.overlayBase64}
+                    alt="Grad-CAM saliency overlay"
+                    className="aspect-square w-full object-cover"
+                  />
+                </div>
               </div>
-              <img
-                src={prediction.gradcam?.originalBase64}
-                alt="Original lesion input"
-                className="aspect-square w-full object-cover"
-              />
+            </>
+          ) : (
+            <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600 leading-relaxed">
+              Uploaded skin photographs and Grad-CAM overlays are not stored permanently in your account history to protect your privacy. Run a new screening to inspect live Grad-CAM maps.
             </div>
-            <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-              <div className="border-b border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
-                Grad-CAM Overlay
-              </div>
-              <img
-                src={prediction.gradcam?.overlayBase64}
-                alt="Grad-CAM saliency overlay"
-                className="aspect-square w-full object-cover"
-              />
-            </div>
-          </div>
+          )}
 
           {quality?.metrics && (
             <div className="mt-5 border-t border-slate-200 pt-4">
@@ -192,7 +228,7 @@ export default function Results({ prediction }) {
 
       <DashboardCard
         title="Full 6-Class Softmax Probability Distribution"
-        subtitle="Raw TensorFlow.js softmax probabilities across all PAD-UFES-20 classes with the 70% screening gate indicated."
+        subtitle="Relative CNN scores across all six PAD-UFES-20 classes for this single image, shown against the 70% uncertainty gate (not overall diagnostic accuracy)."
       >
         <ConfidenceChart probabilities={prediction.allProbabilities} threshold={70} />
       </DashboardCard>

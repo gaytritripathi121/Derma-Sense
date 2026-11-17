@@ -1,17 +1,23 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Activity,
-  BarChart3,
   BookOpen,
+  Cpu,
   Eye,
   FileSearch,
   HeartHandshake,
   History,
   Home,
   Info,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  Settings,
+  UserPlus,
   X,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const NAV_GROUPS = [
   {
@@ -26,9 +32,9 @@ const NAV_GROUPS = [
     ],
   },
   {
-    label: 'Reference & Validation',
+    label: 'Reference & Guide',
     items: [
-      { to: '/performance', label: 'Model Validation', icon: BarChart3 },
+      { to: '/performance', label: 'Model Overview', icon: Cpu },
       { to: '/diseases', label: 'Disease Guide', icon: BookOpen },
       { to: '/about', label: 'About & Safety', icon: Info },
     ],
@@ -36,6 +42,15 @@ const NAV_GROUPS = [
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
+  const navigate = useNavigate();
+  const { user, loading: authLoading, logout } = useAuth();
+
+  const handleLogout = async () => {
+    onClose();
+    await logout();
+    navigate('/', { replace: true });
+  };
+
   return (
     <>
       {isOpen && (
@@ -100,6 +115,93 @@ export default function Sidebar({ isOpen, onClose }) {
               </ul>
             </div>
           ))}
+
+          {!authLoading && (
+            <div>
+              <div className="px-3 pb-2 text-xs font-semibold text-slate-400">Account</div>
+              {user ? (
+                <ul className="space-y-1">
+                  <li>
+                    <NavLink
+                      to="/dashboard"
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        }`
+                      }
+                    >
+                      <LayoutDashboard className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Dashboard</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/settings"
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        }`
+                      }
+                    >
+                      <Settings className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Account Settings</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 transition-colors whitespace-nowrap"
+                    >
+                      <LogOut className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Log Out</span>
+                    </button>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="space-y-1">
+                  <li>
+                    <NavLink
+                      to="/login"
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        }`
+                      }
+                    >
+                      <LogIn className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Log In</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/register"
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        }`
+                      }
+                    >
+                      <UserPlus className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Sign Up</span>
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
         </nav>
 
         <div className="border-t border-slate-200 px-5 py-4 text-xs text-slate-500 leading-relaxed">

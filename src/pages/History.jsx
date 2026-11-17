@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Download, Eye, Trash2 } from 'lucide-react';
+import { Download, Eye, FileText, Trash2 } from 'lucide-react';
 import DashboardCard from '../components/DashboardCard.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { predictionService } from '../services/predictionService.js';
 import { reportService } from '../services/reportService.js';
 import { formatDateTime } from '../utils/formatting.js';
 
 export default function History({ onSelectPrediction }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [items, setItems] = useState([]);
+  const [accountScoped, setAccountScoped] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -17,6 +20,7 @@ export default function History({ onSelectPrediction }) {
     try {
       const data = await predictionService.getHistory();
       setItems(data.items || []);
+      setAccountScoped(Boolean(data.accountScoped));
     } catch (err) {
       setError(err.message || 'Failed to load session history.');
     } finally {
@@ -26,7 +30,7 @@ export default function History({ onSelectPrediction }) {
 
   useEffect(() => {
     loadHistory();
-  }, []);
+  }, [user?.id]);
 
   const handleOpenRecord = async (reportId) => {
     try {
@@ -50,8 +54,12 @@ export default function History({ onSelectPrediction }) {
   return (
     <div className="space-y-6">
       <DashboardCard
-        title="Ephemeral Session Screening History"
-        subtitle="Predictions are held strictly in temporary cookie-scoped server memory for your active session and are never persisted permanently."
+        title={accountScoped ? 'Saved Account Screening History' : 'Ephemeral Session Screening History'}
+        subtitle={
+          accountScoped
+            ? 'Screening summaries saved to your DermaSense AI account. Uploaded skin photographs are never persisted to the database.'
+            : 'Predictions are held strictly in temporary cookie-scoped server memory for your active session and are never persisted permanently.'
+        }
         action={
           items.length > 0 && (
             <button
@@ -60,7 +68,7 @@ export default function History({ onSelectPrediction }) {
               className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-50 whitespace-nowrap"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Clear Session History
+              {accountScoped ? 'Clear Saved History' : 'Clear Session History'}
             </button>
           )
         }
@@ -107,7 +115,12 @@ export default function History({ onSelectPrediction }) {
                           className="h-12 w-12 rounded-md border border-slate-200 object-cover"
                         />
                       ) : (
-                        <div className="h-12 w-12 rounded-md bg-slate-100" />
+                        <div
+                          className="flex h-12 w-12 items-center justify-center rounded-md border border-slate-200 bg-slate-100 text-slate-400"
+                          title="Image not stored for privacy"
+                        >
+                          <FileText className="h-5 w-5" />
+                        </div>
                       )}
                     </td>
                     <td className="py-3 pr-4 font-mono text-xs text-slate-700">{item.reportId}</td>
